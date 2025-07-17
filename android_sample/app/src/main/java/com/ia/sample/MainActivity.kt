@@ -7,6 +7,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -31,10 +32,18 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.Star
+import androidx.compose.material3.Button
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.blur
@@ -48,6 +57,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.ia.sample.bottomSheet.BottomSheetContent
 import com.ia.sample.ui.theme.SampleTheme
 
 class MainActivity : ComponentActivity() {
@@ -142,8 +152,19 @@ class MainActivity : ComponentActivity() {
 }
 
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun screenView(innerPadding: PaddingValues) {
+    val bottomSheetState = rememberModalBottomSheetState(skipPartiallyExpanded= true)
+    var showBottomSheet by remember { mutableStateOf(false) }
+    if (showBottomSheet) {
+        ModalBottomSheet(
+            onDismissRequest = { showBottomSheet = false },
+            sheetState = bottomSheetState
+        ) {
+            BottomSheetContent()
+        }
+    }
     Column(
         modifier = Modifier.padding(innerPadding),
         verticalArrangement = Arrangement.spacedBy(22.dp)
@@ -293,7 +314,10 @@ fun screenView(innerPadding: PaddingValues) {
                 fontSize = 14.sp,
                 fontWeight = FontWeight.W500,
                 color = Color(0xFF0173A5),
-                modifier = Modifier
+                modifier = Modifier.clickable{
+                    showBottomSheet = true
+
+                }
             )
         }
         HorizontalPager(
