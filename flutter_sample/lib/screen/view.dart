@@ -1,6 +1,9 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
+
+import 'bottomSheet/BottomSheetView.dart';
 
 class MainActivity extends StatelessWidget {
   const MainActivity({Key? key}) : super(key: key);
@@ -49,7 +52,10 @@ class MainScreen extends StatelessWidget {
       backgroundColor: Colors.white,
       body: SafeArea(
         child: SizedBox(
-          height: MediaQuery.of(context).size.height,
+          height: MediaQuery
+              .of(context)
+              .size
+              .height,
           child: Column(
             children: [
               // Top Bar
@@ -68,14 +74,14 @@ class MainScreen extends StatelessWidget {
                           fit: BoxFit.cover,
                           errorBuilder:
                               (context, error, stackTrace) =>
-                                  const CircleAvatar(
-                                    radius: 20,
-                                    backgroundColor: Colors.grey,
-                                    child: Icon(
-                                      Icons.person,
-                                      color: Colors.white,
-                                    ),
-                                  ),
+                          const CircleAvatar(
+                            radius: 20,
+                            backgroundColor: Colors.grey,
+                            child: Icon(
+                              Icons.person,
+                              color: Colors.white,
+                            ),
+                          ),
                         ),
                       ),
                     ),
@@ -100,10 +106,11 @@ class MainScreen extends StatelessWidget {
                                 width: 14,
                                 height: 14,
                                 errorBuilder:
-                                    (context, error, stackTrace) => const Text(
-                                      "👋",
-                                      style: TextStyle(fontSize: 14),
-                                    ),
+                                    (context, error, stackTrace) =>
+                                const Text(
+                                  "👋",
+                                  style: TextStyle(fontSize: 14),
+                                ),
                               ),
                             ],
                           ),
@@ -141,11 +148,11 @@ class MainScreen extends StatelessWidget {
                                       height: 16,
                                       errorBuilder:
                                           (context, error, stackTrace) =>
-                                              const Icon(
-                                                Icons.star,
-                                                size: 16,
-                                                color: Color(0xFF0173A5),
-                                              ),
+                                      const Icon(
+                                        Icons.star,
+                                        size: 16,
+                                        color: Color(0xFF0173A5),
+                                      ),
                                     ),
                                     const SizedBox(width: 4),
                                     const Text(
@@ -276,9 +283,9 @@ class _ScreenViewState extends State<ScreenView> {
                       height: 8,
                       decoration: BoxDecoration(
                         color:
-                            isSelected
-                                ? const Color(0xFF0173A5)
-                                : const Color(0xFFA9AAAC),
+                        isSelected
+                            ? const Color(0xFF0173A5)
+                            : const Color(0xFFA9AAAC),
                         borderRadius: BorderRadius.circular(4),
                       ),
                     );
@@ -303,13 +310,11 @@ class _ScreenViewState extends State<ScreenView> {
                     'assets/image.png', // Replace with your assets
                     fit: BoxFit.contain,
                     errorBuilder:
-                        (context, error, stackTrace) => Container(
+                        (context, error, stackTrace) =>
+                        Container(
                           color: Colors.grey[300],
                           child: const Center(
-                            child: Icon(
-                              Icons.image,
-                              color: Colors.grey,
-                            ),
+                            child: Icon(Icons.image, color: Colors.grey),
                           ),
                         ),
                   );
@@ -334,7 +339,8 @@ class _ScreenViewState extends State<ScreenView> {
                             width: double.infinity,
                             height: double.infinity,
                             errorBuilder:
-                                (context, error, stackTrace) => Container(
+                                (context, error, stackTrace) =>
+                                Container(
                                   color: Colors.orange,
                                   width: double.infinity,
                                   height: double.infinity,
@@ -344,10 +350,11 @@ class _ScreenViewState extends State<ScreenView> {
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                Icon(
-                                  Icons.restaurant,
-                                  size: 40,
-                                  color: Colors.white,
+                                SvgPicture.asset(
+                                  "assets/cutlery_icon.svg",
+                                  semanticsLabel: 'Dart Logo',
+                                  width: 40,
+                                  height: 40,
                                 ),
                                 const SizedBox(height: 6),
                                 const Text(
@@ -381,7 +388,8 @@ class _ScreenViewState extends State<ScreenView> {
                             width: double.infinity,
                             height: double.infinity,
                             errorBuilder:
-                                (context, error, stackTrace) => Container(
+                                (context, error, stackTrace) =>
+                                Container(
                                   color: Colors.blue,
                                   width: double.infinity,
                                   height: double.infinity,
@@ -391,10 +399,11 @@ class _ScreenViewState extends State<ScreenView> {
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                Icon(
-                                  Icons.flight_takeoff,
-                                  size: 40,
-                                  color: Colors.white,
+                                SvgPicture.asset(
+                                  "assets/Group.svg",
+                                  semanticsLabel: 'Dart Logo',
+                                  width: 40,
+                                  height: 40,
                                 ),
                                 const SizedBox(height: 6),
                                 const Text(
@@ -429,12 +438,23 @@ class _ScreenViewState extends State<ScreenView> {
                     ),
                   ),
                 ),
-                const Text(
-                  "See All",
-                  style: TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w500,
-                    color: Color(0xFF0173A5),
+                GestureDetector(
+                  onTap: (){
+                showModalBottomSheet(
+                context: context,
+                isScrollControlled: true, // Allows the sheet to take full height
+                builder: (BuildContext context) {
+                return const CustomBottomSheet();
+                },
+                );
+                },
+                  child: const Text(
+                    "See All",
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w500,
+                      color: Color(0xFF0173A5),
+                    ),
                   ),
                 ),
               ],
@@ -466,14 +486,15 @@ class _ScreenViewState extends State<ScreenView> {
                               width: double.infinity,
                               height: double.infinity,
                               errorBuilder:
-                                  (context, error, stackTrace) => Container(
+                                  (context, error, stackTrace) =>
+                                  Container(
                                     color: Colors.brown,
                                     width: double.infinity,
                                     height: double.infinity,
                                   ),
                             ),
                             Padding(
-                              padding: const EdgeInsets.all(12),
+                              padding: const EdgeInsets.all(8),
                               child: Column(
                                 children: [
                                   Row(
@@ -485,7 +506,9 @@ class _ScreenViewState extends State<ScreenView> {
                                         ),
                                         decoration: BoxDecoration(
                                           color: const Color(0x4DFE3333),
-                                          borderRadius: BorderRadius.circular(6),
+                                          borderRadius: BorderRadius.circular(
+                                            6,
+                                          ),
                                         ),
                                         child: const Text(
                                           "2 Star Hotel",
@@ -504,7 +527,7 @@ class _ScreenViewState extends State<ScreenView> {
                                     ],
                                   ),
                                   const Spacer(),
-                                  const GlassmorphicHotelCard()
+                                  const GlassmorphicHotelCard(),
                                 ],
                               ),
                             ),
@@ -523,7 +546,6 @@ class _ScreenViewState extends State<ScreenView> {
     );
   }
 }
-
 
 class GlassmorphicHotelCard extends StatelessWidget {
   const GlassmorphicHotelCard({Key? key}) : super(key: key);
@@ -544,10 +566,7 @@ class GlassmorphicHotelCard extends StatelessWidget {
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
           ),
-          border: Border.all(
-            color: Colors.white.withOpacity(0.3),
-            width: 1,
-          ),
+          border: Border.all(color: Colors.white.withOpacity(0.3), width: 1),
         ),
         child: ClipRRect(
           borderRadius: BorderRadius.circular(20),
@@ -592,10 +611,7 @@ class GlassmorphicHotelCard extends StatelessWidget {
                           const SizedBox(width: 4),
                           Text(
                             "(532)",
-                            style: TextStyle(
-                              fontSize: 14,
-                              color: Colors.white,
-                            ),
+                            style: TextStyle(fontSize: 14, color: Colors.white),
                           ),
                         ],
                       ),
@@ -618,10 +634,7 @@ class GlassmorphicHotelCard extends StatelessWidget {
                           const SizedBox(width: 4),
                           const Text(
                             "504 Corniche Road",
-                            style: TextStyle(
-                              fontSize: 14,
-                              color: Colors.white,
-                            ),
+                            style: TextStyle(fontSize: 14, color: Colors.white),
                           ),
                         ],
                       ),
@@ -629,7 +642,7 @@ class GlassmorphicHotelCard extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.end,
                         children: [
                           const Text(
-                            "300 - 500 QAR",
+                            "30 - 50 QAR",
                             style: TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.w500,
