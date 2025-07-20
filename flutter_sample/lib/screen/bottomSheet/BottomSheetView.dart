@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 
 // Stateful widget for the bottom sheet to manage radio and checkbox states
 class CustomBottomSheet extends StatefulWidget {
-  const CustomBottomSheet({super.key});
+  final dynamic index;
+
+  const CustomBottomSheet({super.key, this.index});
 
   @override
   State<CustomBottomSheet> createState() => _CustomBottomSheetState();
@@ -15,6 +17,7 @@ class _CustomBottomSheetState extends State<CustomBottomSheet> {
 
   @override
   Widget build(BuildContext context) {
+    var index = widget.index;
     return SingleChildScrollView(
       child: Container(
         padding: EdgeInsets.only(
@@ -112,8 +115,13 @@ class _CustomBottomSheetState extends State<CustomBottomSheet> {
             ElevatedButton(
               onPressed: () {
                 // Handle primary button tap
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Primary Button Tapped!')),
+                showModalBottomSheet(
+                  context: context,
+                  isScrollControlled: true,
+                  // Allows the sheet to take full height
+                  builder: (BuildContext context) {
+                    return const CustomBottomSheet(index : 1);
+                  },
                 );
               },
               child: const Text('Primary Button'),

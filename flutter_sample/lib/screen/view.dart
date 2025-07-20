@@ -52,10 +52,7 @@ class MainScreen extends StatelessWidget {
       backgroundColor: Colors.white,
       body: SafeArea(
         child: SizedBox(
-          height: MediaQuery
-              .of(context)
-              .size
-              .height,
+          height: MediaQuery.of(context).size.height,
           child: Column(
             children: [
               // Top Bar
@@ -74,14 +71,14 @@ class MainScreen extends StatelessWidget {
                           fit: BoxFit.cover,
                           errorBuilder:
                               (context, error, stackTrace) =>
-                          const CircleAvatar(
-                            radius: 20,
-                            backgroundColor: Colors.grey,
-                            child: Icon(
-                              Icons.person,
-                              color: Colors.white,
-                            ),
-                          ),
+                                  const CircleAvatar(
+                                    radius: 20,
+                                    backgroundColor: Colors.grey,
+                                    child: Icon(
+                                      Icons.person,
+                                      color: Colors.white,
+                                    ),
+                                  ),
                         ),
                       ),
                     ),
@@ -106,11 +103,10 @@ class MainScreen extends StatelessWidget {
                                 width: 14,
                                 height: 14,
                                 errorBuilder:
-                                    (context, error, stackTrace) =>
-                                const Text(
-                                  "👋",
-                                  style: TextStyle(fontSize: 14),
-                                ),
+                                    (context, error, stackTrace) => const Text(
+                                      "👋",
+                                      style: TextStyle(fontSize: 14),
+                                    ),
                               ),
                             ],
                           ),
@@ -148,11 +144,11 @@ class MainScreen extends StatelessWidget {
                                       height: 16,
                                       errorBuilder:
                                           (context, error, stackTrace) =>
-                                      const Icon(
-                                        Icons.star,
-                                        size: 16,
-                                        color: Color(0xFF0173A5),
-                                      ),
+                                              const Icon(
+                                                Icons.star,
+                                                size: 16,
+                                                color: Color(0xFF0173A5),
+                                              ),
                                     ),
                                     const SizedBox(width: 4),
                                     const Text(
@@ -283,9 +279,9 @@ class _ScreenViewState extends State<ScreenView> {
                       height: 8,
                       decoration: BoxDecoration(
                         color:
-                        isSelected
-                            ? const Color(0xFF0173A5)
-                            : const Color(0xFFA9AAAC),
+                            isSelected
+                                ? const Color(0xFF0173A5)
+                                : const Color(0xFFA9AAAC),
                         borderRadius: BorderRadius.circular(4),
                       ),
                     );
@@ -310,8 +306,7 @@ class _ScreenViewState extends State<ScreenView> {
                     'assets/image.png', // Replace with your assets
                     fit: BoxFit.contain,
                     errorBuilder:
-                        (context, error, stackTrace) =>
-                        Container(
+                        (context, error, stackTrace) => Container(
                           color: Colors.grey[300],
                           child: const Center(
                             child: Icon(Icons.image, color: Colors.grey),
@@ -339,8 +334,7 @@ class _ScreenViewState extends State<ScreenView> {
                             width: double.infinity,
                             height: double.infinity,
                             errorBuilder:
-                                (context, error, stackTrace) =>
-                                Container(
+                                (context, error, stackTrace) => Container(
                                   color: Colors.orange,
                                   width: double.infinity,
                                   height: double.infinity,
@@ -388,8 +382,7 @@ class _ScreenViewState extends State<ScreenView> {
                             width: double.infinity,
                             height: double.infinity,
                             errorBuilder:
-                                (context, error, stackTrace) =>
-                                Container(
+                                (context, error, stackTrace) => Container(
                                   color: Colors.blue,
                                   width: double.infinity,
                                   height: double.infinity,
@@ -439,15 +432,16 @@ class _ScreenViewState extends State<ScreenView> {
                   ),
                 ),
                 GestureDetector(
-                  onTap: (){
-                showModalBottomSheet(
-                context: context,
-                isScrollControlled: true, // Allows the sheet to take full height
-                builder: (BuildContext context) {
-                return const CustomBottomSheet();
-                },
-                );
-                },
+                  onTap: () {
+                    showModalBottomSheet(
+                      context: context,
+                      isScrollControlled: true,
+                      // Allows the sheet to take full height
+                      builder: (BuildContext context) {
+                        return const CustomBottomSheet(index: 1);
+                      },
+                    );
+                  },
                   child: const Text(
                     "See All",
                     style: TextStyle(
@@ -486,8 +480,7 @@ class _ScreenViewState extends State<ScreenView> {
                               width: double.infinity,
                               height: double.infinity,
                               errorBuilder:
-                                  (context, error, stackTrace) =>
-                                  Container(
+                                  (context, error, stackTrace) => Container(
                                     color: Colors.brown,
                                     width: double.infinity,
                                     height: double.infinity,
