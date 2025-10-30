@@ -31,7 +31,9 @@ class _ChatListViewState extends State<ChatListView> {
     return MultiBlocListener(
       listeners: [
         LoadingDialogListener<ChatListCubit, ChatListState>(
-          isLoading: (s) => s.chats is UiLoading,
+          isLoading: (s) {
+            return  s.chats is UiLoading;
+          },
           loadingBuilder:
               (_) => const Center(child: CircularProgressIndicator()),
         ),

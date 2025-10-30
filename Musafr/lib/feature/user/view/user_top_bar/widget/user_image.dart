@@ -17,7 +17,7 @@ class UserImage extends StatelessWidget {
       child:
           image != null
               ? SizedBox()
-              : Text('AH', style: TextStyle(color: whiteColor)),
+              : Text(userModal?.name??"UN", style: TextStyle(color: whiteColor)),
     );
   }
 }

@@ -9,7 +9,6 @@ class GetCurrentUserUseCase {
   GetCurrentUserUseCase(this.userRepository);
 
   Future<DomainResponse<UserModal?>> invoke() async {
-    await Future.delayed(const Duration(seconds: 2));
     return await userRepository.getCurrentUser();
   }
 }

@@ -7,13 +7,15 @@ import '../../feature/chat/di/chat_di.dart';
 import '../../feature/phone_number/di/phone_number_di.dart';
 import '../../feature/timer/di/timer_di.dart';
 import '../../feature/user/di/user_di.dart';
+import '../network/di/networkDi.dart';
 
 Widget appWithDependencies(Widget mainApplication) {
   return MultiRepositoryProvider(
     providers: [
+      ...networkDi,
       ...userDi,
       ...validateDi,
-      ...authRepositoryProvider,
+      ...authDi,
       ...phoneNumberDi,
       ...timerDi,
       ...chatDi,

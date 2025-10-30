@@ -4,7 +4,7 @@ import 'package:flutter_svg/svg.dart';
 import '../../../../core/view/ui_state/ui_state.dart';
 import '../../../../core/view/widgets/edit_text/app_edit_text.dart';
 
-class EmailEditText extends StatelessWidget {
+class NameEditText extends StatelessWidget {
   final UiState<String> value;
   final ValueChanged<String> onTextUpdate;
   final String? placeholder;
@@ -18,7 +18,7 @@ class EmailEditText extends StatelessWidget {
   final bool enabled;
   final TextStyle? textStyle;
 
-  const EmailEditText({
+  const NameEditText({
     super.key,
     required this.value,
     required this.onTextUpdate,
@@ -26,7 +26,7 @@ class EmailEditText extends StatelessWidget {
     this.endView,
     this.textAlign = TextAlign.start,
     this.decoration,
-    this.keyboardType = TextInputType.emailAddress,
+    this.keyboardType = TextInputType.text,
     this.textInputAction = TextInputAction.done,
     this.minLines = 1,
     this.maxLines,
@@ -42,8 +42,8 @@ class EmailEditText extends StatelessWidget {
       startView: Padding(
         padding: const EdgeInsets.all(8.0),
         child: SvgPicture.asset(
-          "assets/icons/sms.svg",
-          semanticsLabel: 'Email Input',
+          "assets/icons/profile_icon.svg",
+          semanticsLabel: 'Name Input',
           width: 22,
           height: 22,
         ),

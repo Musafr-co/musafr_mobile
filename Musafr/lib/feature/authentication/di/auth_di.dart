@@ -9,20 +9,15 @@ import 'package:musafr/feature/authentication/domain/use_case/sign_up_email_use_
 import 'package:musafr/feature/authentication/domain/use_case/sign_up_phone_use_case.dart';
 import 'package:musafr/feature/user/domain/use_case/save_current_user_use_case.dart';
 
+import '../../../core/network/data/client/api_client.dart';
 import '../data/local/source/share_preference/source.dart';
 import '../data/repository/auth_repository_impl.dart';
 import '../domain/repository/auth_repository.dart';
 import '../domain/use_case/check_otp_for_sign_in_use_case.dart';
 
-final authRepositoryProvider = [
+final authDi = [
   RepositoryProvider<AuthRemoteSource>(
-    create: (context) => AuthRemoteSourceImpl(),
-  ),
-  RepositoryProvider<AuthPreferenceSource>(
-    create: (context) => AuthSharePreferenceImpl(),
-  ),
-  RepositoryProvider<AuthRemoteSource>(
-    create: (context) => AuthRemoteSourceImpl(),
+    create: (context) => AuthRemoteSourceImpl(context.read<ApiClient>()),
   ),
   RepositoryProvider<AuthRepository>(
     create:
@@ -32,25 +27,26 @@ final authRepositoryProvider = [
         ),
   ),
   RepositoryProvider<SignInEmailUseCase>(
-    create: (context) => SignInEmailUseCase(context.read<AuthRepository>()),
+    create:
+        (context) => SignInEmailUseCase(
+          context.read<AuthRepository>(),
+          context.read<SaveCurrentUserUseCase>(),
+        ),
   ),
   RepositoryProvider<SignInPhoneNumberUseCase>(
     create:
-        (context) => SignInPhoneNumberUseCase(
-          context.read<AuthRepository>(),
-        ),
+        (context) => SignInPhoneNumberUseCase(context.read<AuthRepository>()),
   ),
   RepositoryProvider<SignUpEmailUseCase>(
     create:
         (context) => SignUpEmailUseCase(
           context.read<AuthRepository>(),
+          context.read<SaveCurrentUserUseCase>(),
         ),
   ),
   RepositoryProvider<SignUpPhoneNumberUseCase>(
     create:
-        (context) => SignUpPhoneNumberUseCase(
-          context.read<AuthRepository>()
-        )
+        (context) => SignUpPhoneNumberUseCase(context.read<AuthRepository>()),
   ),
   RepositoryProvider<CheckOtpForLoginUseCase>(
     create:

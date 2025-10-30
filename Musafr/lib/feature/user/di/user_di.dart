@@ -5,6 +5,7 @@ import 'package:musafr/feature/user/domain/repository/user_repository.dart';
 import 'package:musafr/feature/user/domain/use_case/get_current_user_use_case.dart';
 import 'package:musafr/feature/user/domain/use_case/save_current_user_use_case.dart';
 
+import '../../../core/network/data/client/api_client.dart';
 import '../data/source/local/source/local_source.dart';
 import '../data/source/local/source/local_source_impl.dart';
 import '../data/source/remote/source/user_remote_source_impl.dart';
@@ -14,7 +15,7 @@ final userDi = [
     create: (context) => UserLocalSourceImpl(),
   ),
   RepositoryProvider<UserRemoteSource>(
-    create: (context) => UserRemoteSourceImpl(),
+    create: (context) => UserRemoteSourceImpl(context.read<ApiClient>()),
   ),
   RepositoryProvider<UserRepository>(
     create:

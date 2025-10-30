@@ -8,9 +8,12 @@ import '../../../../core/view/color/color.dart';
 import '../../../../core/view/ui_state/ui_state.dart';
 import '../../../../core/view/widgets/button/primary_button.dart';
 import '../../../../core/view/widgets/button/social_button.dart';
+import '../../../../core/view/widgets/dialogs/error_dialog.dart';
+import '../../../../core/view/widgets/dialogs/loading/loading_dialog.dart';
 import '../../../../core/view/widgets/top_handle_view/top_handle_view.dart';
+import '../../../home/framework/main/landing_screen.dart';
 import '../signUp/sign_up_screen.dart';
-import '../widget/email_edit_text.dart';
+import '../widget/name_edit_text.dart';
 import '../widget/password_edit_text.dart';
 
 class SignInWidget extends StatelessWidget {
@@ -20,27 +23,54 @@ class SignInWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final maxHeight = MediaQuery.of(context).size.height * 0.95;
 
-    return PopScope(
-      canPop: false,
-      child: LayoutBuilder(
-        builder: (context, constraints) {
-          return ConstrainedBox(
-            constraints: BoxConstraints(
-              maxHeight: maxHeight, // never exceed screen height
-            ),
-            child: Stack(
-              children: [
-                _SignInForm(),
-                // BlocSelector<SignInCubit, SignInScreenState, bool>(
-                //   selector: (state) => state.screenState is UiLoading,
-                //   builder: (context, isLoading) {
-                //     return DialogLoading(shouldShowDialog: isLoading);
-                //   },
-                // ),
-              ],
-            ),
-          );
-        },
+    return MultiBlocListener(
+      listeners: [
+        LoadingDialogListener<SignInCubit, SignInScreenState>(
+          isLoading: (s) => s.screenState is UiLoading,
+          loadingBuilder:
+              (_) => const Center(child: CircularProgressIndicator()),
+        ),
+
+        ErrorDialogListener<SignInCubit, SignInScreenState>(
+          screenStateSelector: (s) => s.screenState,
+          shouldShowError:
+              (s) =>
+                  s.screenState is UiError &&
+                  ((s.screenState as UiError).data != null),
+          errorMessageSelector:
+              (s) =>
+                  s.screenState is UiError
+                      ? (s.screenState as UiError).message
+                      : '',
+          onAcknowledge: () => context.read<SignInCubit>().resetErrorState(),
+        ),
+        BlocListener<SignInCubit, SignInScreenState>(
+          listenWhen:
+              (previous, current) =>
+                  previous.switchScreenState != current.switchScreenState,
+          listener: (context, state) {
+            if (state.switchScreenState) {
+              Navigator.of(context).pushAndRemoveUntil(
+                MaterialPageRoute(builder: (context) => LandingScreen()),
+                (destination) => false,
+              );
+              context.read<SignInCubit>().resetNavigation();
+            }
+          },
+        ),
+      ],
+      child: PopScope(
+        canPop: false,
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            return ConstrainedBox(
+              constraints: BoxConstraints(
+                maxHeight: maxHeight, // never exceed screen height
+              ),
+              child: Stack(children: [_SignInForm()]),
+            );
+          },
+        ),
       ),
     );
   }
@@ -56,7 +86,7 @@ class _SignInForm extends StatelessWidget {
           mainAxisSize: MainAxisSize.min, // only take needed space
           children: [
             TopHandle(),
-            _EmailField(),
+            _NameField(),
             _PasswordField(),
             _LoginButton(),
             _Divider(),
@@ -70,18 +100,18 @@ class _SignInForm extends StatelessWidget {
   }
 }
 
-class _EmailField extends StatelessWidget {
+class _NameField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 8),
       child: BlocSelector<SignInCubit, SignInScreenState, UiState<String>>(
-        selector: (state) => state.emailState,
+        selector: (state) => state.userNameState,
         builder: (context, email) {
-          return EmailEditText(
+          return NameEditText(
             value: email,
-            onTextUpdate: context.read<SignInCubit>().updateEmail,
-            placeholder: "Email",
+            onTextUpdate: context.read<SignInCubit>().updateName,
+            placeholder: "UserName",
           );
         },
       ),

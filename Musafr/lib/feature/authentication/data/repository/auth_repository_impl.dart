@@ -20,7 +20,7 @@ class AuthRepositoryImpl implements AuthRepository {
   });
 
   @override
-  Future<DomainResponse<UserModal>> signInUserWithEmail(
+  Future<DomainResponse<UserModal?>> signInUserWithEmail(
     LoginRequest request,
   ) async {
     try {
@@ -43,8 +43,8 @@ class AuthRepositoryImpl implements AuthRepository {
           }
         case DomainFailure():
           {
-            return DomainFailure(error: domainResponse.error, data: request)
-                as DomainResponse<UserModal>;
+            return DomainFailure(error: domainResponse.error, data: null)
+                as DomainResponse<UserModal?>;
           }
       }
       return DomainFailure(error: "Something went wrong", data: null);
@@ -54,7 +54,7 @@ class AuthRepositoryImpl implements AuthRepository {
   }
 
   @override
-  Future<DomainResponse<UserModal>> signUpUserWithEmail(
+  Future<DomainResponse<UserModal?>> signUpUserWithEmail(
     SignUpRequest request,
   ) async {
     try {
@@ -73,12 +73,12 @@ class AuthRepositoryImpl implements AuthRepository {
             UserModal userModel = UserMapper.toDomain(domainResponse.data);
 
             return DomainSuccess<UserModal>(userModel)
-                as DomainResponse<UserModal>;
+                as DomainResponse<UserModal?>;
           }
         case DomainFailure():
           {
-            return DomainFailure(error: domainResponse.error, data: request)
-                as DomainResponse<UserModal>;
+            return DomainFailure(error: domainResponse.error, data: null)
+                as DomainResponse<UserModal?>;
           }
       }
       return DomainFailure(error: "Something went wrong", data: null);
@@ -216,5 +216,11 @@ class AuthRepositoryImpl implements AuthRepository {
     } catch (e) {
       return DomainFailure(error: e.toString(), data: null);
     }
+  }
+
+  @override
+  Future<Stream<DomainResponse<UserModal?>>> getCurrentUserInformation() {
+    // TODO: implement getCurrentUserInformation
+     throw UnimplementedError();
   }
 }

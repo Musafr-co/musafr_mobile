@@ -6,11 +6,12 @@ import 'package:musafr/feature/chat/domain/use_case/create_a_new_chat_use_case.d
 import 'package:musafr/feature/chat/domain/use_case/get_specific_chat_detail_use_case.dart';
 import 'package:musafr/feature/chat/domain/use_case/get_user_chat_list_use_case.dart';
 
+import '../../../core/network/data/client/api_client.dart';
 import '../data/remote/source/chat_source_impl.dart';
 
 final chatDi = [
   RepositoryProvider<ChatRemoteSource>(
-    create: (context) => ChatRemoteSourceImpl(),
+    create: (context) => ChatRemoteSourceImpl(context.read<ApiClient>()),
   ),
   RepositoryProvider<ChatRepository>(
     create: (context) => ChatRepositoryImpl(context.read<ChatRemoteSource>()),

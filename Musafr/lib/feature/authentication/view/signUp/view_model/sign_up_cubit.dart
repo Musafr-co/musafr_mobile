@@ -6,17 +6,20 @@ import 'package:musafr/feature/authentication/domain/use_case/sign_up_email_use_
 import 'package:musafr/feature/authentication/view/signUp/view_model/sign_up_state.dart';
 import 'package:musafr/feature/validator/domain/model/validation_result.dart';
 import 'package:musafr/feature/validator/domain/use_case/validate_email_use_case.dart';
+import 'package:musafr/feature/validator/domain/use_case/validate_name_use_case.dart';
 import 'package:musafr/feature/validator/domain/use_case/validate_password_use_case.dart';
 
 class SignUpCubit extends Cubit<SignUpState> {
   final ValidateEmailUseCase validateEmailUseCase;
   final ValidatePasswordUseCase validatePasswordUseCase;
   final SignUpEmailUseCase signUpEmailUseCase;
+  final ValidateNameUseCase validateNameUseCase;
 
   SignUpCubit(
     this.validateEmailUseCase,
     this.validatePasswordUseCase,
     this.signUpEmailUseCase,
+    this.validateNameUseCase,
   ) : super(SignUpState());
 
   void updateEmail(String email) {
@@ -32,6 +35,27 @@ class SignUpCubit extends Cubit<SignUpState> {
           emit(
             state.copyWith(
               emailState: UiError(data: email, message: validationMessage),
+            ),
+          );
+          break;
+        }
+    }
+    _setupScreenState();
+  }
+
+  void updateName(String name) {
+    final nameState = validateNameUseCase.validate(name);
+    switch (nameState) {
+      case ValidationSuccess():
+        {
+          emit(state.copyWith(nameState: UiSuccess(data: name)));
+          break;
+        }
+      case ValidationFailure(:final validationMessage):
+        {
+          emit(
+            state.copyWith(
+              nameState: UiError(data: name, message: validationMessage),
             ),
           );
           break;
@@ -108,6 +132,7 @@ class SignUpCubit extends Cubit<SignUpState> {
   void _setupScreenState() {
     if (state.passwordState is UiSuccess &&
         state.emailState is UiSuccess &&
+        state.nameState is UiSuccess &&
         state.confirmPasswordState is UiSuccess) {
       emit(state.copyWith(screenState: UiSuccess(data: true)));
     } else {
@@ -117,20 +142,25 @@ class SignUpCubit extends Cubit<SignUpState> {
 
   Future<void> signUpUser() async {
     final email = state.emailState.data;
+    final name = state.nameState.data;
     final password = state.passwordState.data;
     final referralCode = state.referralCodeState.data;
     if (state.emailState is! UiSuccess) {
       updateEmail(email ?? "");
+      return;
+    }
+    if (state.nameState is! UiSuccess) {
+      updateName(name ?? "");
       return;
     } else if (state.passwordState is! UiSuccess) {
       updatePassword(password ?? "");
       return;
     }
     emit(state.copyWith(screenState: UiLoading()));
-    await Future.delayed(Duration(seconds: 2));
     final loginRequest = SignUpRequest(
       email: email!,
       password: password!,
+      userName : name!,
       referralCode: referralCode ?? "",
     );
     final result = await signUpEmailUseCase.invoke(loginRequest);

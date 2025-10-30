@@ -1,4 +1,5 @@
 import '../../domain/model/domain_response.dart';
+import 'dart:convert';
 
 abstract class NetworkResponse<T> {
   DomainResponse<T> toDomainResponse() {
@@ -32,7 +33,18 @@ class NetworkFailure<T> extends NetworkResponse<T> {
   final String error;
   final T? data;
 
-  NetworkFailure({required this.error, required this.data});
+  NetworkFailure({required String error, required this.data})
+    : error = _extractErrorMessage(error);
+
+  static String _extractErrorMessage(String error) {
+    String errorMessage = error.replaceAll(RegExp(r'^\"|\"$'), "");
+    try{
+      List<dynamic> parsedJson = jsonDecode(error);
+      return parsedJson.map((element) => element["description"]).join(',');
+    }catch(exception){
+      return errorMessage;
+    }
+  }
 }
 
 class NetworkException<T> extends NetworkResponse<T> {

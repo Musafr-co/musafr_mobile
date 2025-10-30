@@ -1,8 +1,8 @@
 import 'dart:core';
 
 class LoginRequest {
-  String email;
+  String userName;
   String password;
 
-  LoginRequest({required this.email, required this.password});
+  LoginRequest({required this.userName, required this.password});
 }

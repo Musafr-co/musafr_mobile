@@ -32,10 +32,10 @@ class SignInPhoneNumberView extends StatelessWidget {
         ),
         ErrorDialogListener<SignInPhoneNumberCubit, SignInPhoneNumberState>(
           screenStateSelector: (s) => s.screenState,
-          shouldShowError:
-              (s) =>
-                  s.screenState is UiError &&
-                  ((s.screenState as UiError).data ?? false),
+          shouldShowError: (s) {
+            return s.screenState is UiError &&
+                ((s.screenState as UiError).data != null);
+          },
           errorMessageSelector:
               (s) =>
                   s.screenState is UiError

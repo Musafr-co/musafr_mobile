@@ -4,10 +4,13 @@ import 'package:flutter_svg/svg.dart';
 import 'package:musafr/core/view/color/color.dart';
 import 'package:musafr/feature/authentication/view/signUp/view_model/sign_up_cubit.dart';
 import 'package:musafr/feature/authentication/view/signUp/view_model/sign_up_state.dart';
+import 'package:musafr/feature/authentication/view/widget/name_edit_text.dart';
 
 import '../../../../core/view/ui_state/ui_state.dart';
 import '../../../../core/view/widgets/button/primary_button.dart';
 import '../../../../core/view/widgets/button/social_button.dart';
+import '../../../../core/view/widgets/dialogs/error_dialog.dart';
+import '../../../../core/view/widgets/dialogs/loading/loading_dialog.dart';
 import '../widget/email_edit_text.dart';
 import '../widget/password_edit_text.dart';
 import '../widget/referral_edit_text.dart';
@@ -17,45 +20,42 @@ class SignUpView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 10),
-        child: Column(
-          spacing: 16,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            _Header(),
-            _TitleSection(),
-            _FormFields(),
-            _SocialLoginSection(),
-            _Footer(),
-            // These remain in the tree, but only rebuild when needed
-            // BlocSelector<SignUpCubit, SignUpState, bool>(
-            //   selector: (state) => state.screenState is UiLoading,
-            //   builder: (context, isLoading) {
-            //     return DialogLoading(shouldShowDialog: isLoading);
-            //   },
-            // ),
-            // BlocSelector<SignUpCubit, SignUpState, _ErrorDialogData>(
-            //   selector: (state) {
-            //     if (state.screenState is UiError) {
-            //       return _ErrorDialogData(
-            //         show: true,
-            //         message: (state.screenState as UiError).message,
-            //       );
-            //     }
-            //     return _ErrorDialogData(show: false, message: '');
-            //   },
-            //   builder: (context, errorData) {
-            //     return ErrorDialog(
-            //       showDialog: errorData.show,
-            //       errorMessage: errorData.message,
-            //       onAcknowledge:
-            //           () => context.read<SignUpCubit>().resetErrorState(),
-            //     );
-            //   },
-            // ),
-          ],
+    return MultiBlocListener(
+      listeners: [
+        LoadingDialogListener<SignUpCubit, SignUpState>(
+          isLoading: (s) => s.screenState is UiLoading,
+          loadingBuilder:
+              (_) => const Center(child: CircularProgressIndicator()),
+        ),
+        ErrorDialogListener<SignUpCubit, SignUpState>(
+          screenStateSelector: (s) => s.screenState,
+          shouldShowError:
+              (s) =>
+          s.screenState is UiError &&
+              ((s.screenState as UiError).data != null),
+          errorMessageSelector:
+              (s) =>
+          s.screenState is UiError
+              ? (s.screenState as UiError).message
+              : '',
+          onAcknowledge:
+              () => context.read<SignUpCubit>().resetErrorState(),
+        ),
+      ],
+      child: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 10),
+          child: Column(
+            spacing: 16,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              _Header(),
+              _TitleSection(),
+              _FormFields(),
+              _SocialLoginSection(),
+              _Footer()
+            ],
+          ),
         ),
       ),
     );
@@ -124,6 +124,16 @@ class _FormFields extends StatelessWidget {
     return Column(
       spacing: 16,
       children: [
+        BlocSelector<SignUpCubit, SignUpState, UiState<String>>(
+          selector: (state) => state.nameState,
+          builder: (context, name) {
+            return NameEditText(
+              value: name,
+              onTextUpdate: context.read<SignUpCubit>().updateName,
+              placeholder: "UserName",
+            );
+          },
+        ),
         BlocSelector<SignUpCubit, SignUpState, UiState<String>>(
           selector: (state) => state.emailState,
           builder: (context, email) {

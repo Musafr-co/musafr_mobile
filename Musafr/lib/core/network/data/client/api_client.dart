@@ -1,20 +1,29 @@
 import 'package:dio/dio.dart';
 import 'package:musafr/core/network/data/interceptor/auth_interceptor.dart';
 
+import '../../../../feature/authentication/data/local/source/share_preference/source.dart';
+
 class ApiClient {
   final Dio dio;
+  final AuthPreferenceSource authPreferenceSource;
 
-  ApiClient()
-      : dio = Dio(
-    BaseOptions(
-      baseUrl: 'https://jsonplaceholder.typicode.com', // Example base URL
-      connectTimeout: const Duration(seconds: 10),
-      receiveTimeout: const Duration(seconds: 10),
-      contentType: 'application/json',
-    ),
-  ) {
-    dio.interceptors.add(AuthInterceptor(dio));
-    dio.interceptors.add(LogInterceptor(responseBody: true)); // Optional logging
+  ApiClient(this.authPreferenceSource)
+    : dio = Dio(
+        BaseOptions(
+          baseUrl: 'http://213.199.34.215/', // Example base URL
+          connectTimeout: const Duration(seconds: 10),
+          receiveTimeout: const Duration(seconds: 10),
+          contentType: 'application/json',
+          validateStatus: (status) {
+            // Accept all status codes under 500 (so no exception for 401)
+            return status != null && status < 500;
+          },
+        ),
+      ) {
+    dio.interceptors.add(AuthInterceptor(dio, authPreferenceSource));
+    dio.interceptors.add(
+      LogInterceptor(responseBody: true),
+    ); // Optional logging
   }
 
   Future<Response> get(String path, {Map<String, dynamic>? queryParams}) async {
@@ -24,6 +33,4 @@ class ApiClient {
   Future<Response> post(String path, {dynamic data}) async {
     return dio.post(path, data: data);
   }
-
-// Add put, delete, etc. as needed
 }

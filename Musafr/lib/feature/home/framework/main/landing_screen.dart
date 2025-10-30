@@ -15,7 +15,6 @@ import '../../../user/view/user_top_bar/view_modal/logged_in_user_state.dart';
 class LandingScreen extends StatelessWidget {
   const LandingScreen({super.key});
 
-
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
@@ -23,7 +22,7 @@ class LandingScreen extends StatelessWidget {
         BlocProvider<LoggedInUserCubit>(
           create:
               (BuildContext context) =>
-              LoggedInUserCubit(context.read<GetCurrentUserUseCase>()),
+                  LoggedInUserCubit(context.read<GetCurrentUserUseCase>()),
         ),
         BlocProvider<LandingScreenCubit>(
           create: (BuildContext context) => LandingScreenCubit(),
@@ -32,7 +31,9 @@ class LandingScreen extends StatelessWidget {
       child: MultiBlocListener(
         listeners: [
           LoadingDialogListener<LoggedInUserCubit, LoggedInUserState>(
-            isLoading: (s) => s.currentUser is UiLoading,
+            isLoading: (s) {
+              return s.currentUser is UiLoading;
+            },
             loadingBuilder:
                 (_) => const Center(child: CircularProgressIndicator()),
           ),
@@ -47,7 +48,6 @@ class LandingScreen extends StatelessWidget {
     );
   }
 }
-
 
 class LandingScreenView extends StatefulWidget {
   final int currentIndex;

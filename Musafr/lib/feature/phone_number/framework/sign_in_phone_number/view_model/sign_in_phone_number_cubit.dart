@@ -51,9 +51,8 @@ class SignInPhoneNumberCubit extends Cubit<SignInPhoneNumberState> {
   }
 
   void gotoSignUp() {
-    emit(state.copyWith(switchScreenState:  true));
+    emit(state.copyWith(switchScreenState: true));
     updateSignInEnabled();
-
   }
 
   Future<void> updateCountry(CountryModal country) async {
@@ -102,7 +101,12 @@ class SignInPhoneNumberCubit extends Cubit<SignInPhoneNumberState> {
         }
       case DomainFailure(:final error):
         {
-          emit(state.copyWith(screenState: UiSuccess(data: false), switchScreenState: false));
+          emit(
+            state.copyWith(
+              screenState: UiError(message: error, data: false),
+              switchScreenState: false,
+            ),
+          );
           return;
         }
     }
@@ -110,9 +114,7 @@ class SignInPhoneNumberCubit extends Cubit<SignInPhoneNumberState> {
 
   void updateSignInEnabled() {
     emit(
-      state.copyWith(
-        screenState: UiIdle(data: state.phoneState is UiSuccess),
-      ),
+      state.copyWith(screenState: UiIdle(data: state.phoneState is UiSuccess)),
     );
   }
 
@@ -120,8 +122,8 @@ class SignInPhoneNumberCubit extends Cubit<SignInPhoneNumberState> {
     emit(state.copyWith(screenState: UiIdle(data: false)));
   }
 
-  void resetNavigation(){
-    emit(state.copyWith(switchScreenState:  false));
+  void resetNavigation() {
+    emit(state.copyWith(switchScreenState: false));
     updateSignInEnabled();
   }
 }

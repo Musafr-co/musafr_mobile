@@ -9,7 +9,7 @@ class CheckOtpForSignUpUseCase {
 
   CheckOtpForSignUpUseCase(this._authRepository, this._saveCurrentUserUseCase);
 
-  Future<DomainResponse<UserModal>> invoke(
+  Future<DomainResponse<UserModal?>> invoke(
     String phoneNumber,
     String otp,
   ) async {
@@ -17,10 +17,12 @@ class CheckOtpForSignUpUseCase {
     switch (response) {
       case DomainSuccess():
         {
-          final updateResponse = await _saveCurrentUserUseCase.invoke(
-            response.data,
-            saveLocalOnly: true,
-          );
+          if(response.data!=null) {
+            final updateResponse = await _saveCurrentUserUseCase.invoke(
+              response.data!,
+              saveLocalOnly: true,
+            );
+          }
           return response;
         }
       case DomainFailure():

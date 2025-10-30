@@ -6,7 +6,7 @@ class SignInPhoneNumberUseCase {
 
   SignInPhoneNumberUseCase(this._authRepository);
 
-  Future<DomainResponse<void>> call(String phoneNumber) {
-    return _authRepository.loginWithPhoneNumber(phoneNumber);
+  Future<DomainResponse<void>> call(String phoneNumber) async {
+    return await _authRepository.loginWithPhoneNumber(phoneNumber);
   }
 }

@@ -1,15 +1,17 @@
 import 'package:dio/dio.dart';
+import 'package:musafr/feature/authentication/data/local/source/share_preference/source.dart';
 
 import '../model/token_storage.dart';
 
 class AuthInterceptor extends Interceptor {
   final Dio dio;
+  final AuthPreferenceSource authPreferenceSource;
 
-  AuthInterceptor(this.dio);
+  AuthInterceptor(this.dio, this.authPreferenceSource);
 
   @override
-  void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
-    final token = TokenStorage.accessToken;
+  Future<void> onRequest(RequestOptions options, RequestInterceptorHandler handler) async {
+    final token = await authPreferenceSource.getUserAuthToken();
     if (token != null) {
       options.headers['Authorization'] = 'Bearer $token';
     }
@@ -32,18 +34,19 @@ class AuthInterceptor extends Interceptor {
   }
 
   Future<bool> _refreshToken() async {
-    final refreshToken = TokenStorage.refreshToken;
+    final refreshToken = await authPreferenceSource.getUserRefreshToken();
     if (refreshToken == null) return false;
 
     try {
-      final response = await dio.post('/auth/refresh', data: {
-        'refresh_token': refreshToken,
-      });
+      final response = await dio.post(
+        '/auth/refresh',
+        data: {'refresh_token': refreshToken},
+      );
 
       final newAccessToken = response.data['access_token'];
       final newRefreshToken = response.data['refresh_token'];
-
-      TokenStorage.saveTokens(newAccessToken, newRefreshToken);
+      await authPreferenceSource.saveUserAuthToken(newAccessToken);
+      await authPreferenceSource.saveUserRefreshToken(newRefreshToken);
       return true;
     } catch (_) {
       return false;

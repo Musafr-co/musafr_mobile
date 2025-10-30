@@ -13,13 +13,13 @@ class DialogManager {
       WidgetBuilder builder, {
         bool barrierDismissible = false,
       }) {
+    _dialogContexts.add(context);
     return showDialog<T>(
       context: context,
       barrierDismissible: barrierDismissible,
       useRootNavigator: true,
       barrierColor: Colors.transparent,
       builder: (ctx) {
-        _dialogContexts.add(ctx);
         return builder(ctx);
       },
     ).whenComplete(() {

@@ -1,27 +1,31 @@
 import '../../../../../core/view/ui_state/ui_state.dart';
 
 class SignInScreenState {
-  UiState<String> emailState;
+  UiState<String> userNameState;
 
   UiState<String> passwordState;
 
   UiState<bool> screenState;
+  bool switchScreenState;
 
   SignInScreenState({
-    this.emailState = const UiIdle(data: ""),
+    this.userNameState = const UiIdle(data: ""),
     this.passwordState = const UiIdle(data: ""),
     this.screenState = const UiIdle(data: false),
+    this.switchScreenState = false
   });
 
   SignInScreenState copyWith({
-    UiState<String>? emailState,
+    UiState<String>? userNameState,
     UiState<String>? passwordState,
     UiState<bool>? screenState,
+    bool? switchScreenState,
   }) {
     return SignInScreenState(
-      emailState: emailState ?? this.emailState,
+      userNameState: userNameState ?? this.userNameState,
       passwordState: passwordState ?? this.passwordState,
       screenState: screenState ?? this.screenState,
+      switchScreenState: switchScreenState ?? this.switchScreenState,
     );
   }
 }

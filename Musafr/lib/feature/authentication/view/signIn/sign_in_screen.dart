@@ -3,8 +3,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:musafr/feature/authentication/domain/use_case/sign_in_email_use_case.dart';
 import 'package:musafr/feature/authentication/view/signIn/sign_in_view.dart';
 import 'package:musafr/feature/authentication/view/signIn/view_model/sign_in_cubit.dart';
+import 'package:musafr/feature/phone_number/framework/sign_in_phone_number/sign_in_phone_number_screen.dart';
 import 'package:musafr/feature/validator/domain/use_case/validate_email_use_case.dart';
 import 'package:musafr/feature/validator/domain/use_case/validate_password_use_case.dart';
+
+import '../../../validator/domain/use_case/validate_name_use_case.dart';
 
 class SignInScreen extends StatelessWidget {
   const SignInScreen({super.key});
@@ -15,8 +18,8 @@ class SignInScreen extends StatelessWidget {
     return BlocProvider<SignInCubit>(
       create:
           (context) => SignInCubit(
-            context.read<ValidateEmailUseCase>(),
             context.read<ValidatePasswordUseCase>(),
+            context.read<ValidateNameUseCase>(),
             context.read<SignInEmailUseCase>(),
           ),
       child: SignInWidget(),
@@ -29,8 +32,6 @@ void showSignInSheet(BuildContext context) {
     context: context,
     isScrollControlled: true,
     barrierColor: Colors.transparent,
-    // isDismissible: false,
-    // enableDrag: false,
     builder: (BuildContext context) {
       return SignInScreen();
     },
