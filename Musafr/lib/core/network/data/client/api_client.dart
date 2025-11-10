@@ -22,8 +22,14 @@ class ApiClient {
       ) {
     dio.interceptors.add(AuthInterceptor(dio, authPreferenceSource));
     dio.interceptors.add(
-      LogInterceptor(responseBody: true),
-    ); // Optional logging
+      LogInterceptor(
+        request: true,
+        requestBody: true,   // 👈 Logs POST/PUT body
+        responseBody: true,  // 👈 Logs response data
+        responseHeader: false,
+        error: true,
+      ),
+    );
   }
 
   Future<Response> get(String path, {Map<String, dynamic>? queryParams}) async {

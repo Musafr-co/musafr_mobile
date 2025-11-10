@@ -13,9 +13,21 @@ class ChatRemoteSourceImpl extends ChatRemoteSource {
   }
 
   @override
-  Future<NetworkResponse<List<ChatDto>>> getUserChats() {
-    // TODO: implement getUserChats
+  Future<NetworkResponse<List<ChatDto>>> getUserChats() async {
     throw UnimplementedError();
+    // final response = await apiClient.post(
+    //   "api/v1/auth/chat",
+    // );
+    // if (response.statusCode! >= 200 && response.statusCode! < 300) {
+    //   try {
+    //     final user = ChatDto.fromJson(response.data);
+    //     return NetworkSuccess<UserDto>(user, "Success", response.statusCode!);
+    //   } catch (exception) {
+    //     return NetworkException(exception as Exception);
+    //   }
+    // } else {
+    //   return NetworkFailure(error: response.data, data: null);
+    // }
   }
 
   @override

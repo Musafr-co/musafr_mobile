@@ -1,10 +1,4 @@
-import 'package:musafr/feature/chat/data/modal/faq_dto.dart';
-import 'package:musafr/feature/chat/data/modal/review_dto.dart';
-import 'package:musafr/feature/chat/data/modal/room_dto.dart';
-
-import 'amenities_dto.dart';
-
-class HotelDto {
+class HotelInfo {
   int id;
   String? hotelId;
   String? name;
@@ -22,5 +16,5 @@ class HotelDto {
   String? amenities;
   String? lastUpdate;
 
-  HotelDto({required this.id});
+  HotelInfo({required this.id});
 }

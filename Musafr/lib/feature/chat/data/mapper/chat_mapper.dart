@@ -1,18 +1,19 @@
 import 'package:musafr/feature/chat/domain/entity/chat_detail.dart';
 
 import '../modal/chat_dto.dart';
+import 'message_mapper.dart';
 
 class ChatMapper {
   static ChatDto fromDomain(Chat chat) {
     return ChatDto(
       id: chat.id,
       title: chat.title ?? "",
-      startDate: chat.startDate,
-      endDate: chat.endDate,
+      startTime: chat.startDate,
+      endTime: chat.endDate,
       noOfAdults: chat.noOfAdults,
       noOfChildren: chat.noOfChildren,
       orderStatus: chat.orderStatus,
-      // messages: chat.messages,
+      messages: chat.messages?.map((e) => MessageMapper.fromDomain(e)).toList(),
     );
   }
 
@@ -20,12 +21,13 @@ class ChatMapper {
     return Chat(
       id: chatDto.id,
       title: chatDto.title,
-      startDate: chatDto.startDate,
-      endDate: chatDto.endDate,
+      startDate: chatDto.startTime,
+      endDate: chatDto.endTime,
       noOfAdults: chatDto.noOfAdults,
       noOfChildren: chatDto.noOfChildren,
       orderStatus: chatDto.orderStatus,
-      // messages: chatDto.messages,
+      messages:
+          chatDto.messages?.map((e) => MessageMapper.toDomain(e)).toList(),
     );
   }
 }

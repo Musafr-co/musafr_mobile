@@ -1,8 +1,7 @@
-import 'package:musafr/feature/chat/domain/entity/message_parameters.dart';
+import 'package:musafr/feature/chat/data/modal/MessageParamsDto.dart';
+import 'package:musafr/feature/chat/data/modal/hotel_dto.dart';
 
-import 'hotel_info.dart';
-
-class AppMessage {
+class MessageDto {
   int id;
   int? chatId;
   int? deepSeekStatus;
@@ -12,10 +11,10 @@ class AppMessage {
   String? deepSeekResponse;
   String? deepSeekResponseTime;
   String? isTrigger;
-  MessageParameter? parameters;
-  List<HotelInfo?>? hotels;
-
-  AppMessage({required this.id,
+  MessageParamsDto? parameters;
+  List<HotelDto?>? hotels;
+  MessageDto({
+    required this.id,
     this.chatId,
     this.deepSeekStatus,
     this.amadeusStatus,
@@ -25,5 +24,6 @@ class AppMessage {
     this.deepSeekResponseTime,
     this.isTrigger,
     this.parameters,
-    this.hotels});
+    this.hotels,
+  });
 }

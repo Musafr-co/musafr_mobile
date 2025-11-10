@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:musafr/feature/chat/framework/chat_list/view_modal/chat_list_cubit.dart';
 import 'package:musafr/feature/chat/framework/chat_list/view_modal/chat_list_state.dart';
 import 'package:musafr/feature/chat/framework/widget/chat_list_item.dart';
 
+import '../../../../core/view/color/color_mapper.dart';
 import '../../../../core/view/ui_state/ui_state.dart';
 import '../../../../core/view/widgets/dialogs/loading/loading_dialog.dart';
 import '../../../user/view/user_top_bar/logged_in_user_top_bar.dart';
@@ -28,103 +30,165 @@ class _ChatListViewState extends State<ChatListView> {
 
   @override
   Widget build(BuildContext context) {
-    return MultiBlocListener(
-      listeners: [
-        LoadingDialogListener<ChatListCubit, ChatListState>(
-          isLoading: (s) {
-            return  s.chats is UiLoading;
-          },
-          loadingBuilder:
-              (_) => const Center(child: CircularProgressIndicator()),
-        ),
-        BlocListener<ChatListCubit, ChatListState>(
-          listenWhen:
-              (previous, current) =>
-                  previous.navigateToFav != current.navigateToFav,
-          listener: (context, state) {
-            if (state.navigateToFav) {
-              Navigator.of(context).push(
-                MaterialPageRoute(builder: (context) => const Placeholder()),
-              );
-              context.read<ChatListCubit>().resetNavigation();
-            }
-          },
-        ),
-        BlocListener<ChatListCubit, ChatListState>(
-          listenWhen:
-              (previous, current) =>
-                  previous.navigateToNotification !=
-                  current.navigateToNotification,
-          listener: (context, state) {
-            if (state.navigateToNotification) {
-              Navigator.of(context).push(
-                MaterialPageRoute(builder: (context) => const Placeholder()),
-              );
-              context.read<ChatListCubit>().resetNavigation();
-            }
-          },
-        ),
-        BlocListener<ChatListCubit, ChatListState>(
-          listenWhen:
-              (previous, current) =>
-                  previous.selectedChat != current.selectedChat,
-          listener: (context, state) {
-            if (state.selectedChat != null && state.selectedChat! > 0) {
-              Navigator.of(context).push(
-                MaterialPageRoute(builder: (context) => const Placeholder()),
-              );
-              context.read<ChatListCubit>().resetNavigation();
-            }
-          },
-        ),
-      ],
+    final double statusBarHeight = MediaQuery.of(context).padding.top;
+    return AnnotatedRegion<SystemUiOverlayStyle>(
+      value: const SystemUiOverlayStyle(
+        statusBarColor: Colors.transparent,
+        statusBarIconBrightness: Brightness.dark,
+      ),
       child: Scaffold(
-        body: SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.fromLTRB(16.0, 0, 16, 0),
-            child: Stack(
-              children: [
-                Column(
-                  spacing: 16,
-                  children: [
-                    LoggedInUserTopBar(),
-                    BlocSelector<
-                      ChatListCubit,
-                      ChatListState,
-                      UiState<List<Chat?>>
-                    >(
-                      selector: (state) => state.chats,
-                      builder: (context, state) {
-                        if (state.data?.isEmpty ?? true) {
-                          return SizedBox();
-                        }
-                        return Expanded(
-                          child: ListView.builder(
-                            itemCount: state.data!.length + 1,
-                            itemBuilder: (context, index) {
-                              if (index == state.data!.length) {
-                                return SizedBox(height: 60);
+        body: Stack(
+          children: [
+            Positioned(
+              top: 0,
+              left: 0,
+              right: 0,
+              height: statusBarHeight+300,
+              child: Image(
+                image: AssetImage('assets/images/page_back_cover.png'),
+                fit: BoxFit.cover,
+              ),
+            ),
+
+            Positioned(
+              top: 0,
+              left: 0,
+              right: 0,
+              height: statusBarHeight,
+              child: Container(
+                width: double.infinity,
+                height: statusBarHeight+300,
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [
+                      rgba(255, 255, 255, 0.7),
+                      rgba(255, 255, 255, 1),
+                    ],
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                  ),
+                ),
+              ),
+            ),
+
+            Positioned(
+              top: statusBarHeight,
+              left: 0,
+              right: 0,
+              height: 300,
+              child: Container(
+                width: double.infinity,
+                color: Colors.white,
+                height: statusBarHeight,
+
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.only(top: statusBarHeight),
+              child: MultiBlocListener(
+                listeners: [
+                  LoadingDialogListener<ChatListCubit, ChatListState>(
+                    isLoading: (s) {
+                      return s.chats is UiLoading;
+                    },
+                    loadingBuilder:
+                        (_) => const Center(child: CircularProgressIndicator()),
+                  ),
+                  BlocListener<ChatListCubit, ChatListState>(
+                    listenWhen:
+                        (previous, current) =>
+                            previous.navigateToFav != current.navigateToFav,
+                    listener: (context, state) {
+                      if (state.navigateToFav) {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => const Placeholder(),
+                          ),
+                        );
+                        context.read<ChatListCubit>().resetNavigation();
+                      }
+                    },
+                  ),
+                  BlocListener<ChatListCubit, ChatListState>(
+                    listenWhen:
+                        (previous, current) =>
+                            previous.navigateToNotification !=
+                            current.navigateToNotification,
+                    listener: (context, state) {
+                      if (state.navigateToNotification) {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => const Placeholder(),
+                          ),
+                        );
+                        context.read<ChatListCubit>().resetNavigation();
+                      }
+                    },
+                  ),
+                  BlocListener<ChatListCubit, ChatListState>(
+                    listenWhen:
+                        (previous, current) =>
+                            previous.selectedChat != current.selectedChat,
+                    listener: (context, state) {
+                      if (state.selectedChat != null &&
+                          state.selectedChat! > 0) {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => const Placeholder(),
+                          ),
+                        );
+                        context.read<ChatListCubit>().resetNavigation();
+                      }
+                    },
+                  ),
+                ],
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(16.0, 0, 16, 0),
+                  child: Stack(
+                    children: [
+                      Column(
+                        children: [
+                          LoggedInUserTopBar(),
+                          BlocSelector<
+                            ChatListCubit,
+                            ChatListState,
+                            UiState<List<Chat?>>
+                          >(
+                            selector: (state) => state.chats,
+                            builder: (context, state) {
+                              if (state.data?.isEmpty ?? true) {
+                                return const SizedBox();
                               }
-                              return ChatListItem(
-                                chat: state.data!.elementAt(index)!,
+                              return Expanded(
+                                child: ListView.builder(
+                                  itemCount: state.data!.length + 1,
+                                  itemBuilder: (context, index) {
+                                    if (index == state.data!.length) {
+                                      return const SizedBox(height: 60);
+                                    }
+                                    return ChatListItem(
+                                      chat: state.data!.elementAt(index)!,
+                                    );
+                                  },
+                                ),
                               );
                             },
                           ),
-                        );
-                      },
-                    ),
-                  ],
-                ),
-                Align(
-                  alignment: Alignment.bottomCenter,
-                  child: Padding(
-                    padding: const EdgeInsets.fromLTRB(8.0, 4, 8, 8),
-                    child: CreateANewTripButton(),
+                        ],
+                      ),
+                      Align(
+                        alignment: Alignment.bottomCenter,
+                        child: Padding(
+                          padding: const EdgeInsets.fromLTRB(8.0, 4, 8, 8),
+                          child: CreateANewTripButton(),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-              ],
+              ),
             ),
-          ),
+          ],
         ),
       ),
     );

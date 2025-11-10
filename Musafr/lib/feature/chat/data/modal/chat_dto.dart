@@ -1,18 +1,20 @@
+import 'package:musafr/feature/chat/data/modal/messageDto.dart';
+
 class ChatDto {
   int id;
   String? title;
-  DateTime? startDate;
-  DateTime? endDate;
+  DateTime? startTime;
+  DateTime? endTime;
   int? noOfAdults;
   int? noOfChildren;
   int? orderStatus;
-  List<String?>? messages;
+  List<MessageDto>? messages;
 
   ChatDto({
     required this.id,
     this.title,
-    this.startDate,
-    this.endDate,
+    this.startTime,
+    this.endTime,
     this.noOfAdults,
     this.noOfChildren,
     this.orderStatus,
