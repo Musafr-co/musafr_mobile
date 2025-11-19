@@ -14,4 +14,6 @@ abstract class ChatRepository {
     List<AdditionalMessage> messages,
     int chatId,
   );
+
+  Future<DomainResponse<Chat?>> getStatusChatById(int id);
 }

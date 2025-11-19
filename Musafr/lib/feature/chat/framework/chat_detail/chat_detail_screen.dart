@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:musafr/feature/chat/domain/use_case/listen_to_chat_inidicator_use_case.dart';
 import 'package:musafr/feature/chat/framework/chat_detail/chat_detail_view.dart';
 import 'package:musafr/feature/chat/framework/chat_detail/view_modal/chat_detail_cubit.dart';
 
@@ -40,6 +41,7 @@ class ChatDetailScreen extends StatelessWidget {
           (context) => ChatDetailCubit(
             context.read<GetSpecificChatDetailUseCase>(),
             context.read<SendMessageToChatUseCase>(),
+            context.read<ListenToChatIndicatorUseCase>(),
             chatId
           ),
       child: ChatDetailView(),

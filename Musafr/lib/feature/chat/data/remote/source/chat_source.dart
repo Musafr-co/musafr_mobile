@@ -7,4 +7,5 @@ abstract class ChatRemoteSource{
   Future<NetworkResponse<List<ChatDto>>> getUserChats();
   Future<NetworkResponse<ChatDto>> getChatById(int id);
   Future<NetworkResponse<ChatDto>> sendMessageToChat(String message,int? chatId);
+  Future<NetworkResponse<ChatDto>> getStatusById(int chatId);
 }

@@ -5,6 +5,7 @@ import 'package:musafr/feature/chat/domain/repository/chat_repository.dart';
 import 'package:musafr/feature/chat/domain/use_case/create_a_new_chat_use_case.dart';
 import 'package:musafr/feature/chat/domain/use_case/get_specific_chat_detail_use_case.dart';
 import 'package:musafr/feature/chat/domain/use_case/get_user_chat_list_use_case.dart';
+import 'package:musafr/feature/chat/domain/use_case/listen_to_chat_inidicator_use_case.dart';
 
 import '../../../core/network/data/client/api_client.dart';
 import '../data/remote/source/chat_source_impl.dart';
@@ -26,5 +27,8 @@ final chatDi = [
   ),
   RepositoryProvider<SendMessageToChatUseCase>(
     create: (context) => SendMessageToChatUseCase(context.read<ChatRepository>()),
+  ),
+  RepositoryProvider<ListenToChatIndicatorUseCase>(
+    create: (context) => ListenToChatIndicatorUseCase(context.read<ChatRepository>()),
   ),
 ];

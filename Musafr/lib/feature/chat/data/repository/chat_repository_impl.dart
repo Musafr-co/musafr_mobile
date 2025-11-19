@@ -90,6 +90,7 @@ class ChatRepositoryImpl extends ChatRepository {
     }
   }
 
+
   @override
   Future<DomainResponse<Chat>> sendUserCustomMessage(
     List<AdditionalMessage> messages,
@@ -97,5 +98,29 @@ class ChatRepositoryImpl extends ChatRepository {
   ) {
     // TODO: implement sendUserCustomMessage
     throw UnimplementedError();
+  }
+
+  @override
+  Future<DomainResponse<Chat?>> getStatusChatById(int id) async {
+    try {
+      final response = await _remoteSource.getStatusById(id);
+      DomainResponse domainResponse = response.toDomainResponse();
+      switch (domainResponse) {
+        case DomainSuccess():
+          {
+            return DomainSuccess<Chat>(
+              ChatMapper.toDomain(domainResponse.data),
+            );
+          }
+        case DomainFailure():
+          {
+            return DomainFailure(error: domainResponse.error, data: null)
+            as DomainResponse<Chat?>;
+          }
+      }
+      return DomainFailure(error: "Something went wrong", data: null);
+    } catch (e) {
+      return DomainFailure(error: e.toString(), data: null);
+    }
   }
 }

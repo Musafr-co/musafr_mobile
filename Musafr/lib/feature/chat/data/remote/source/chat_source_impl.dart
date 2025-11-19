@@ -26,6 +26,25 @@ class ChatRemoteSourceImpl extends ChatRemoteSource {
     }
   }
 
+
+  @override
+  Future<NetworkResponse<ChatDto>> getStatusById(int id) async {
+    final response = await apiClient.get("api/v1/chat/$id/status");
+    if (response.statusCode! >= 200 && response.statusCode! < 300) {
+      try {
+        final chat = ChatDto.fromJson(response.data['data']['result']);
+        return NetworkSuccess<ChatDto>(chat, "Success", response.statusCode!);
+      } catch (exception) {
+        return NetworkException(exception as Exception);
+      }
+    } else {
+      return NetworkFailure(
+        error: response.statusMessage ?? response.data,
+        data: null,
+      );
+    }
+  }
+
   @override
   Future<NetworkResponse<List<ChatDto>>> getUserChats() async {
     final response = await apiClient.get("api/v1/chat");
