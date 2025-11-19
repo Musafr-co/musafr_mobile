@@ -6,12 +6,14 @@ import '../../../../user/domain/modal/user_modal.dart';
 class ChatListState {
   UiState<List<Chat>> chats;
   bool navigateToNotification;
+  bool showNewChat;
   bool navigateToFav;
   int? selectedChat;
 
   ChatListState({
     this.chats = const UiLoading(data: []),
     this.navigateToNotification = false,
+    this.showNewChat = false,
     this.navigateToFav = false,
     this.selectedChat,
   });
@@ -22,6 +24,7 @@ class ChatListState {
     bool? navigateToFav,
     UiState<UserModal?>? currentUser,
     int? selectedChat,
+    bool? showNewChat,
   }) {
     return ChatListState(
       chats: chats ?? this.chats,
@@ -29,6 +32,7 @@ class ChatListState {
           navigateToNotification ?? this.navigateToNotification,
       navigateToFav: navigateToFav ?? this.navigateToFav,
       selectedChat: selectedChat ?? this.selectedChat,
+      showNewChat: showNewChat ?? this.showNewChat,
     );
   }
 }

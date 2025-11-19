@@ -7,127 +7,126 @@ class GetUserChatListUseCase {
 
   GetUserChatListUseCase(this._chatRepository);
 
-  Future<DomainResponse<List<Chat>>> invoke() async {
-    await Future.delayed(Duration(seconds: 5));
-    return DomainSuccess([
-      Chat(
-        id: 1,
-        title: "title",
-        image: null,
-        startDate: DateTime.now(),
-        endDate: DateTime.now(),
-        noOfAdults: 4,
-        noOfChildren: 2
-      ),
-      Chat(
-        id: 2,
-        title: "title",
-        image: null,
-        startDate: DateTime.now(),
-        endDate: DateTime.now(),
-        noOfAdults: 4,
-        noOfChildren: 2
-      ),
-      Chat(
-        id: 2,
-        title: "title",
-        image: null,
-        startDate: DateTime.now(),
-        endDate: DateTime.now(),
-        noOfAdults: 4,
-        noOfChildren: 2
-      ),
-      Chat(
-        id: 2,
-        title: "title",
-        image: null,
-        startDate: DateTime.now(),
-        endDate: DateTime.now(),
-        noOfAdults: 4,
-        noOfChildren: 2
-      ),
-      Chat(
-        id: 2,
-        title: "title",
-        image: null,
-        startDate: DateTime.now(),
-        endDate: DateTime.now(),
-        noOfAdults: 4,
-        noOfChildren: 2
-      ),
-      Chat(
-        id: 2,
-        title: "title",
-        image: null,
-        startDate: DateTime.now(),
-        endDate: DateTime.now(),
-        noOfAdults: 4,
-        noOfChildren: 2
-      ),
-      Chat(
-        id: 2,
-        title: "title",
-        image: null,
-        startDate: DateTime.now(),
-        endDate: DateTime.now(),
-        noOfAdults: 4,
-        noOfChildren: 2
-      ),
-      Chat(
-        id: 2,
-        title: "title",
-        image: null,
-        startDate: DateTime.now(),
-        endDate: DateTime.now(),
-        noOfAdults: 4,
-        noOfChildren: 2
-      ),
-      Chat(
-        id: 2,
-        title: "title",
-        image: null,
-        startDate: DateTime.now(),
-        endDate: DateTime.now(),
-        noOfAdults: 4,
-        noOfChildren: 2
-      ),
-      Chat(
-        id: 2,
-        title: "title",
-        image: null,
-        startDate: DateTime.now(),
-        endDate: DateTime.now(),
-        noOfAdults: 4,
-        noOfChildren: 2
-      ),
-      Chat(
-        id: 2,
-        title: "title",
-        image: null,
-        startDate: DateTime.now(),
-        endDate: DateTime.now(),
-        noOfAdults: 4,
-        noOfChildren: 2
-      ),
-      Chat(
-        id: 2,
-        title: "title",
-        image: null,
-        startDate: DateTime.now(),
-        endDate: DateTime.now(),
-        noOfAdults: 4,
-        noOfChildren: 2
-      ),
-      Chat(
-        id: 2,
-        title: "title",
-        image: null,
-        startDate: DateTime.now(),
-        endDate: DateTime.now(),
-        noOfAdults: 4,
-        noOfChildren: 2
-      ),
-    ]);
+  Future<DomainResponse<List<Chat>?>> invoke() async {
+    // return DomainSuccess([
+    //   Chat(
+    //     id: 1,
+    //     title: "title",
+    //     image: null,
+    //     startDate: DateTime.now(),
+    //     endDate: DateTime.now(),
+    //     noOfAdults: 4,
+    //     noOfChildren: 2
+    //   ),
+    //   Chat(
+    //     id: 2,
+    //     title: "title",
+    //     image: null,
+    //     startDate: DateTime.now(),
+    //     endDate: DateTime.now(),
+    //     noOfAdults: 4,
+    //     noOfChildren: 2
+    //   ),
+    //   Chat(
+    //     id: 2,
+    //     title: "title",
+    //     image: null,
+    //     startDate: DateTime.now(),
+    //     endDate: DateTime.now(),
+    //     noOfAdults: 4,
+    //     noOfChildren: 2
+    //   ),
+    //   Chat(
+    //     id: 2,
+    //     title: "title",
+    //     image: null,
+    //     startDate: DateTime.now(),
+    //     endDate: DateTime.now(),
+    //     noOfAdults: 4,
+    //     noOfChildren: 2
+    //   ),
+    //   Chat(
+    //     id: 2,
+    //     title: "title",
+    //     image: null,
+    //     startDate: DateTime.now(),
+    //     endDate: DateTime.now(),
+    //     noOfAdults: 4,
+    //     noOfChildren: 2
+    //   ),
+    //   Chat(
+    //     id: 2,
+    //     title: "title",
+    //     image: null,
+    //     startDate: DateTime.now(),
+    //     endDate: DateTime.now(),
+    //     noOfAdults: 4,
+    //     noOfChildren: 2
+    //   ),
+    //   Chat(
+    //     id: 2,
+    //     title: "title",
+    //     image: null,
+    //     startDate: DateTime.now(),
+    //     endDate: DateTime.now(),
+    //     noOfAdults: 4,
+    //     noOfChildren: 2
+    //   ),
+    //   Chat(
+    //     id: 2,
+    //     title: "title",
+    //     image: null,
+    //     startDate: DateTime.now(),
+    //     endDate: DateTime.now(),
+    //     noOfAdults: 4,
+    //     noOfChildren: 2
+    //   ),
+    //   Chat(
+    //     id: 2,
+    //     title: "title",
+    //     image: null,
+    //     startDate: DateTime.now(),
+    //     endDate: DateTime.now(),
+    //     noOfAdults: 4,
+    //     noOfChildren: 2
+    //   ),
+    //   Chat(
+    //     id: 2,
+    //     title: "title",
+    //     image: null,
+    //     startDate: DateTime.now(),
+    //     endDate: DateTime.now(),
+    //     noOfAdults: 4,
+    //     noOfChildren: 2
+    //   ),
+    //   Chat(
+    //     id: 2,
+    //     title: "title",
+    //     image: null,
+    //     startDate: DateTime.now(),
+    //     endDate: DateTime.now(),
+    //     noOfAdults: 4,
+    //     noOfChildren: 2
+    //   ),
+    //   Chat(
+    //     id: 2,
+    //     title: "title",
+    //     image: null,
+    //     startDate: DateTime.now(),
+    //     endDate: DateTime.now(),
+    //     noOfAdults: 4,
+    //     noOfChildren: 2
+    //   ),
+    //   Chat(
+    //     id: 2,
+    //     title: "title",
+    //     image: null,
+    //     startDate: DateTime.now(),
+    //     endDate: DateTime.now(),
+    //     noOfAdults: 4,
+    //     noOfChildren: 2
+    //   ),
+    // ]);
     return await _chatRepository.getUserChats();
   }
 }

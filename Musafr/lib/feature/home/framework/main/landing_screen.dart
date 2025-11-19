@@ -143,7 +143,7 @@ class _LandingScreenViewState extends State<LandingScreenView> {
         body: IndexedStack(
           index: widget.currentIndex,
           children: [
-            _buildNavigator(0, const ChatListScreen()),
+            _buildNavigator(0, ChatListScreen(ctx : context)),
             _buildNavigator(1, const Placeholder()),
             _buildNavigator(2, const Placeholder()),
             _buildNavigator(3, const Placeholder()),

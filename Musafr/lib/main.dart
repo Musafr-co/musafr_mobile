@@ -24,6 +24,7 @@ class MyApp extends StatelessWidget {
       MaterialApp(
         theme: ThemeData(
           // This is the theme of your application.
+          fontFamily: "Poppins",
           colorScheme: ColorScheme.fromSeed(seedColor: primaryColor),
         ),
         home: SplashScreen(),

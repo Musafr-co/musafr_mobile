@@ -26,8 +26,9 @@ class ApiClient {
         request: true,
         requestBody: true,   // 👈 Logs POST/PUT body
         responseBody: true,  // 👈 Logs response data
-        responseHeader: false,
+        responseHeader: true,
         error: true,
+
       ),
     );
   }

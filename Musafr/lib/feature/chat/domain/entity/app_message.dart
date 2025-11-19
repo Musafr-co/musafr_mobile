@@ -11,7 +11,7 @@ class AppMessage {
   String? senderRequestTime;
   String? deepSeekResponse;
   String? deepSeekResponseTime;
-  String? isTrigger;
+  int? isTrigger;
   MessageParameter? parameters;
   List<HotelInfo?>? hotels;
 

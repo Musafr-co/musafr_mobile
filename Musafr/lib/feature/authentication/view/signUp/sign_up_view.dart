@@ -11,6 +11,7 @@ import '../../../../core/view/widgets/button/primary_button.dart';
 import '../../../../core/view/widgets/button/social_button.dart';
 import '../../../../core/view/widgets/dialogs/error_dialog.dart';
 import '../../../../core/view/widgets/dialogs/loading/loading_dialog.dart';
+import '../../../../core/view/widgets/top_handle_view/top_handle_view.dart';
 import '../widget/email_edit_text.dart';
 import '../widget/password_edit_text.dart';
 import '../widget/referral_edit_text.dart';
@@ -49,6 +50,7 @@ class SignUpView extends StatelessWidget {
             spacing: 16,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              Align(alignment: Alignment.center,child: TopHandle()),
               _Header(),
               _TitleSection(),
               _FormFields(),

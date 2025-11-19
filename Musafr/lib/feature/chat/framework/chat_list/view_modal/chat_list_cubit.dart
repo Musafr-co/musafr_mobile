@@ -1,7 +1,4 @@
-import 'dart:math';
-
 import 'package:bloc/bloc.dart';
-import 'package:musafr/feature/chat/domain/use_case/create_a_new_chat_use_case.dart';
 
 import '../../../../../core/domain/model/domain_response.dart';
 import '../../../../../core/view/ui_state/ui_state.dart';
@@ -10,10 +7,8 @@ import 'chat_list_state.dart';
 
 class ChatListCubit extends Cubit<ChatListState> {
   final GetUserChatListUseCase _getUserChatListUseCase;
-  final CreateANewChatUseCase _createANewChatUseCase;
 
-  ChatListCubit(this._getUserChatListUseCase, this._createANewChatUseCase)
-    : super(ChatListState()) ;
+  ChatListCubit(this._getUserChatListUseCase) : super(ChatListState());
 
   void getChatList() async {
     emit(state.copyWith(chats: UiLoading(data: null)));
@@ -21,27 +16,7 @@ class ChatListCubit extends Cubit<ChatListState> {
     switch (result) {
       case DomainSuccess():
         {
-          emit(state.copyWith(chats: UiSuccess(data: result.data)));
-          return;
-        }
-      case DomainFailure(:final error):
-        {
-          emit(state.copyWith(chats: UiError(message: error, data: null)));
-          return;
-        }
-    }
-  }
-@override
-  Future<void> close() {
-    // TODO: implement close
-    return super.close();
-  }
-  void createNewChat() async {
-    final result = await _createANewChatUseCase.invoke();
-    switch (result) {
-      case DomainSuccess():
-        {
-          emit(state.copyWith(selectedChat: Random().nextInt(1000000000)));
+          emit(state.copyWith(chats: UiSuccess(data: result.data ?? [])));
           return;
         }
       case DomainFailure(:final error):
@@ -52,12 +27,26 @@ class ChatListCubit extends Cubit<ChatListState> {
     }
   }
 
+  void createNewChat() async {
+    emit(state.copyWith(showNewChat: true));
+  }
+
+  void selectChat(int chatId){
+    emit(state.copyWith(selectedChat: chatId));
+    resetNavigation();
+  }
+
+  void resetError() {
+    emit(state.copyWith(chats: UiSuccess(data: [])));
+  }
+
   void resetNavigation() {
     emit(
       state.copyWith(
         navigateToFav: false,
         navigateToNotification: false,
-        selectedChat: null,
+        selectedChat: 0,
+        showNewChat: false,
       ),
     );
   }

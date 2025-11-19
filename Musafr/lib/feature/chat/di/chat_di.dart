@@ -24,7 +24,7 @@ final chatDi = [
         (context) =>
             GetSpecificChatDetailUseCase(context.read<ChatRepository>()),
   ),
-  RepositoryProvider<CreateANewChatUseCase>(
-    create: (context) => CreateANewChatUseCase(context.read<ChatRepository>()),
+  RepositoryProvider<SendMessageToChatUseCase>(
+    create: (context) => SendMessageToChatUseCase(context.read<ChatRepository>()),
   ),
 ];

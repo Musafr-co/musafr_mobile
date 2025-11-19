@@ -12,30 +12,22 @@ class ChatRepositoryImpl extends ChatRepository {
   ChatRepositoryImpl(this._remoteSource);
 
   @override
-  Future<DomainResponse<Chat>> getChatById(int id) {
-    // TODO: implement getChatById
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<DomainResponse<List<Chat>>> getUserChats() async {
+  Future<DomainResponse<Chat>> getChatById(int id) async {
     try {
-      final response = await _remoteSource.getUserChats();
+      final response = await _remoteSource.getChatById(id);
       DomainResponse domainResponse = response.toDomainResponse();
       switch (domainResponse) {
         case DomainSuccess():
           {
-            return DomainSuccess<List<Chat>>(
-                  domainResponse.data
-                      .map((e) => ChatMapper.toDomain(e))
-                      .toList!,
-                )
-                as DomainResponse<List<Chat>>;
+            return DomainSuccess<Chat>(
+              ChatMapper.toDomain(domainResponse.data),
+            )
+            as DomainResponse<Chat>;
           }
         case DomainFailure():
           {
             return DomainFailure(error: domainResponse.error, data: null)
-                as DomainResponse<List<Chat>>;
+            as DomainResponse<Chat>;
           }
       }
       return DomainFailure(error: "Something went wrong", data: null);
@@ -45,9 +37,39 @@ class ChatRepositoryImpl extends ChatRepository {
   }
 
   @override
-  Future<DomainResponse<Chat>> createNewChat() async {
+  Future<DomainResponse<List<Chat>?>> getUserChats() async {
     try {
-      final response = await _remoteSource.createNewChat();
+      final response = await _remoteSource.getUserChats();
+      DomainResponse domainResponse = response.toDomainResponse();
+      switch (domainResponse) {
+        case DomainSuccess():
+          {
+            return DomainSuccess<List<Chat>>(
+                (domainResponse.data as List<dynamic>)
+                    .map((e) => ChatMapper.toDomain(e))
+                    .toList()
+                )
+                as DomainResponse<List<Chat>?>;
+          }
+        case DomainFailure():
+          {
+            return DomainFailure(error: domainResponse.error, data: null)
+                as DomainResponse<List<Chat>?>;
+          }
+      }
+      return DomainFailure(error: "Something went wrong", data: []);
+    } catch (e) {
+      return DomainFailure(error: e.toString(), data: []);
+    }
+  }
+
+  @override
+  Future<DomainResponse<Chat?>> sendMessageToChat(
+    String message,
+    int chatId,
+  ) async {
+    try {
+      final response = await _remoteSource.sendMessageToChat(message, chatId);
       DomainResponse domainResponse = response.toDomainResponse();
       switch (domainResponse) {
         case DomainSuccess():
@@ -59,19 +81,13 @@ class ChatRepositoryImpl extends ChatRepository {
         case DomainFailure():
           {
             return DomainFailure(error: domainResponse.error, data: null)
-                as DomainResponse<Chat>;
+                as DomainResponse<Chat?>;
           }
       }
       return DomainFailure(error: "Something went wrong", data: null);
     } catch (e) {
       return DomainFailure(error: e.toString(), data: null);
     }
-  }
-
-  @override
-  Future<DomainResponse<Chat>> sendMessage(String message, int chatId) {
-    // TODO: implement senMessage
-    throw UnimplementedError();
   }
 
   @override
