@@ -15,6 +15,7 @@ class ChatDetailCubit extends Cubit<ChatDetailState> {
   final SendMessageToChatUseCase _sendMessageToChatUseCase;
   final ListenToChatIndicatorUseCase _listenToChatIndicatorUseCase;
   int selectedChatId;
+  StreamSubscription? _subscription = null;
 
   ChatDetailCubit(
     this._getChatDetailUseCase,
@@ -22,7 +23,13 @@ class ChatDetailCubit extends Cubit<ChatDetailState> {
     this._listenToChatIndicatorUseCase,
     this.selectedChatId,
   ) : super(
-        ChatDetailState(selectedChatId: selectedChatId, selectedDetails: false),
+        ChatDetailState(
+          selectedChatId: selectedChatId,
+          selectedDetails: false,
+          canSendMessage: false,
+          navigateToLatest: false,
+          currentMessageState: UiIdle(data: ""),
+        ),
       ) {
     getChatDetail();
   }
@@ -36,40 +43,10 @@ class ChatDetailCubit extends Cubit<ChatDetailState> {
     switch (result) {
       case DomainSuccess():
         {
-          emit(state.copyWith(chatState: UiSuccess(data: result.data)));
-          return;
-        }
-      case DomainFailure(:final error):
-        {
-          emit(state.copyWith(chatState: UiError(message: error, data: null)));
-          return;
-        }
-    }
-  }
-
-  void sendMessage() async {
-    emit(state.copyWith(chatState: UiLoading(data: state.chatState?.data)));
-    final result = await _sendMessageToChatUseCase.invoke(
-      state.currentMessage ?? "",
-      selectedChatId,
-    );
-    switch (result) {
-      case DomainSuccess():
-        {
-          final messages = state.chatState?.data?.messages ?? [];
-          if (result.data?.messages != null) {
-            messages.add(result.data!.messages!.first);
-            if (result.data?.messages?.first?.deepSeekStatus == 0 ||
-                result.data?.messages?.first?.amadeusStatus == 0) {
-              listenToChatForId(selectedChatId);
-            }
-          }
-          final data = state.chatState?.data;
-          data?.messages = messages;
           emit(
             state.copyWith(
-              chatState: UiSuccess(data: data),
-              currentMessage: "",
+              chatState: UiSuccess(data: result.data),
+              navigateToLatest: true,
             ),
           );
           return;
@@ -82,28 +59,94 @@ class ChatDetailCubit extends Cubit<ChatDetailState> {
     }
   }
 
+  void sendMessage() async {
+    if (state.currentMessageState == UiError) {
+      return;
+    }
+
+    emit(
+      state.copyWith(
+        chatState: UiLoading(data: state.chatState?.data),
+        currentMessageState: UiLoading(
+          data: state.currentMessageState?.data ?? "",
+        ),
+      ),
+    );
+    final result = await _sendMessageToChatUseCase.invoke(
+      state.currentMessageState?.data ?? "",
+      selectedChatId,
+    );
+    switch (result) {
+      case DomainSuccess():
+        {
+          selectedChatId = result.data?.id ?? 0;
+          final messages = state.chatState?.data?.messages ?? [];
+          if (result.data?.messages != null) {
+            messages.add(result.data!.messages!.first);
+            if (result.data?.messages?.first?.deepSeekStatus == 0 ||
+                result.data?.messages?.first?.amadeusStatus == 0) {
+              emit(
+                state.copyWith(
+                  currentMessageState: UiError(
+                    data: "",
+                    message: "Please Wait for the response",
+                  ),
+                  navigateToLatest: true,
+                ),
+              );
+              listenToChatForId(selectedChatId);
+            }
+          }
+          final data = state.chatState?.data;
+          data?.messages = messages;
+          emit(
+            state.copyWith(
+              chatState: UiSuccess(data: data),
+              currentMessageState: UiIdle(data: ""),
+            ),
+          );
+        }
+      case DomainFailure(:final error):
+        {
+          emit(state.copyWith(chatState: UiError(message: error, data: null)));
+        }
+    }
+  }
+
+  void resetNavigation() {
+    emit(state.copyWith(navigateToLatest: false));
+  }
+
   void updateCurrentMessage(String message) {
-    emit(state.copyWith(currentMessage: message));
+    emit(state.copyWith(currentMessageState: UiSuccess(data: message)));
   }
 
   void onAcknowledge() {}
 
   void listenToChatForId(int selectedChatId) {
-    StreamSubscription? _subscription;
     _subscription = _listenToChatIndicatorUseCase.invoke(selectedChatId).listen(
       (event) {
         switch (event) {
           case DomainSuccess():
             {
-              if (event.data?.messages?.last?.deepSeekStatus == 1 && event.data?.messages?.last?.amadeusStatus == 1) {
+              if (state.chatState?.data?.messages?.last?.deepSeekStatus !=
+                  event.data?.messages?.last?.deepSeekStatus) {
                 getChatDetail();
+              } else if (event.data?.messages?.last?.isTrigger == 1 && event.data?.messages?.last?.amadeusStatus == 1 ) {
+                getChatDetail();
+                _subscription?.cancel();
+              }
+              else if(event.data?.messages?.last?.isTrigger == 0){
                 _subscription?.cancel();
               }
             }
           case DomainFailure(:final error):
             {
               emit(
-                state.copyWith(chatState: UiError(message: error, data: null)),
+                state.copyWith(
+                  chatState: UiError(message: error, data: null),
+                  currentMessageState: UiSuccess(data: ""),
+                ),
               );
               return;
             }

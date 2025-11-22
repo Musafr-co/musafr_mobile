@@ -17,7 +17,6 @@ class SendMessageToChatEditText extends StatefulWidget {
   final TextInputAction textInputAction;
   final int minLines;
   final int? maxLines;
-  final bool enabled;
   final TextStyle? textStyle;
   final Function() onMessageSend;
 
@@ -34,7 +33,6 @@ class SendMessageToChatEditText extends StatefulWidget {
     this.textInputAction = TextInputAction.done,
     this.minLines = 1,
     this.maxLines,
-    this.enabled = true,
     this.textStyle,
     required this.onMessageSend,
   });
@@ -45,7 +43,6 @@ class SendMessageToChatEditText extends StatefulWidget {
 }
 
 class _SendMessageToChatEditText extends State<SendMessageToChatEditText> {
-
   @override
   Widget build(BuildContext context) {
     return AppEditText(
@@ -59,19 +56,21 @@ class _SendMessageToChatEditText extends State<SendMessageToChatEditText> {
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: Container(
-
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(12),
               color: primaryColor,
             ),
             child: Padding(
               padding: const EdgeInsets.all(8.0),
-              child: SvgPicture.asset(
-                     "assets/icons/send_message_icon.svg",
-                semanticsLabel: 'hide_show_pass',
-                width: 22,
-                height: 22,
-              ),
+              child:
+                  widget.value != UiLoading
+                      ? SvgPicture.asset(
+                        "assets/icons/send_message_icon.svg",
+                        width: 22,
+                        height: 22,
+                      )
+                      :
+                  CircularProgressIndicator(),
             ),
           ),
         ),
@@ -83,7 +82,7 @@ class _SendMessageToChatEditText extends State<SendMessageToChatEditText> {
       textInputAction: widget.textInputAction,
       minLines: widget.minLines,
       maxLines: widget.maxLines,
-      enabled: widget.enabled,
+      enabled: widget.value != UiError,
     );
   }
 }

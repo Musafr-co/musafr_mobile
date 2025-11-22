@@ -7,14 +7,18 @@ class ChatDetailState {
   UiState<Chat?>? chatState;
   bool selectedDetails;
   int selectedChatId;
-  String? currentMessage;
+  UiState<String>? currentMessageState;
+  bool canSendMessage = true;
+  bool navigateToLatest = false;
 
   ChatDetailState({
     this.screenState,
     this.chatState,
-    this.currentMessage,
+    required this.currentMessageState,
     required this.selectedDetails,
     required this.selectedChatId,
+    required this.canSendMessage,
+    required this.navigateToLatest,
   });
 
   ChatDetailState copyWith({
@@ -22,14 +26,18 @@ class ChatDetailState {
     UiState<Chat?>? chatState,
     bool? selectedDetails,
     int? selectedChatId,
-    String? currentMessage,
+    UiState<String>? currentMessageState,
+    bool? canSendMessage,
+    bool? navigateToLatest,
   }) {
     return ChatDetailState(
       screenState: screenState ?? this.screenState,
       chatState: chatState ?? this.chatState,
       selectedDetails: selectedDetails ?? this.selectedDetails,
       selectedChatId: selectedChatId ?? this.selectedChatId,
-      currentMessage: currentMessage ?? this.currentMessage,
+      currentMessageState: currentMessageState ?? this.currentMessageState,
+      canSendMessage: canSendMessage ?? this.canSendMessage,
+      navigateToLatest: navigateToLatest ?? this.navigateToLatest,
     );
   }
 }

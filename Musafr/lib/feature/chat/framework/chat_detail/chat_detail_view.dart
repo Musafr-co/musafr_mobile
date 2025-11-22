@@ -10,6 +10,7 @@ import '../../../../core/view/widgets/dialogs/loading/loading_dialog.dart';
 import '../../../../core/view/widgets/top_handle_view/top_handle_view.dart';
 import '../../domain/entity/chat_detail.dart';
 import '../widget/SendMessageToChatView.dart';
+import '../widget/message_detail_view.dart';
 
 class ChatDetailView extends StatelessWidget {
   final ScrollController _scrollController = ScrollController();
@@ -37,6 +38,25 @@ class ChatDetailView extends StatelessWidget {
                       ? (s.screenState as UiError).message
                       : '',
           onAcknowledge: () => context.read<ChatDetailCubit>().onAcknowledge(),
+        ),
+        BlocListener<ChatDetailCubit, ChatDetailState>(
+          listenWhen:
+              (previous, current) =>
+                  previous.navigateToLatest != current.navigateToLatest,
+          listener: (context, state) {
+            if (state.navigateToLatest) {
+              Future.delayed(const Duration(milliseconds: 500), () {
+                if (_scrollController.hasClients) {
+                  _scrollController.animateTo(
+                    _scrollController.position.maxScrollExtent,
+                    duration: const Duration(milliseconds: 300),
+                    curve: Curves.easeOut,
+                  );
+                }
+              });
+              context.read<ChatDetailCubit>().resetNavigation();
+            }
+          },
         ),
       ],
       child: SafeArea(
@@ -97,56 +117,8 @@ class ChatDetailView extends StatelessWidget {
                               itemCount: state?.data?.messages?.length ?? 0,
                               itemBuilder: (context, index) {
                                 final message = state?.data?.messages?[index];
-                                return Column(
-                                  children: [
-                                    Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                        vertical: 6,
-                                        horizontal: 10,
-                                      ),
-                                      child: Align(
-                                        alignment: Alignment.centerRight,
-                                        child: Container(
-                                          padding: const EdgeInsets.all(10),
-                                          decoration: BoxDecoration(
-                                            color: messageFromUserColor,
-                                            borderRadius: BorderRadius.only(topLeft: Radius.circular(20), topRight:  Radius.circular(20), bottomRight: Radius.zero, bottomLeft:  Radius.circular(20)),
-                                          ),
-                                          child: Padding(
-                                            padding: const EdgeInsets.fromLTRB(16,12,16,12),
-                                            child: Text(
-                                              message?.senderRequest?.toString() ?? "",
-                                              style: TextStyle(fontSize: 14, color: titleTextColor, ),
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                        vertical: 6,
-                                        horizontal: 10,
-                                      ),
-                                      child: Align(
-                                        alignment: Alignment.centerLeft,
-                                        child: Container(
-                                          padding: const EdgeInsets.all(10),
-                                          decoration: BoxDecoration(
-                                            color: messageFromServerColor,
-                                            borderRadius: BorderRadius.only(topLeft: Radius.circular(20), topRight:  Radius.circular(20), bottomLeft: Radius.zero, bottomRight:  Radius.circular(20)),
-                                          ),
-                                          child: Padding(
-                                            padding: const EdgeInsets.fromLTRB(16,12,16,12),
-                                            child: message?.deepSeekStatus == 1? Text(
-                                              message?.deepSeekResponse?.toString() ?? "",
-                                              style: TextStyle(fontSize: 14, color: titleTextColor, ),
-                                            ): CircularProgressIndicator(),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                );
+                                if (message == null) return Container();
+                                return MessageDetailView(message: message);
                               },
                             ),
                           )
@@ -158,11 +130,16 @@ class ChatDetailView extends StatelessWidget {
                               fit: BoxFit.cover,
                             ),
                           ),
-                      BlocSelector<ChatDetailCubit, ChatDetailState, String?>(
-                        selector: (state) => state.currentMessage,
+                      BlocSelector<
+                        ChatDetailCubit,
+                        ChatDetailState,
+                        UiState<String>
+                      >(
+                        selector:
+                            (state) => state.currentMessageState ?? UiLoading(),
                         builder: (context, state) {
                           return SendMessageToChatEditText(
-                            value: UiSuccess(data: state ?? ""),
+                            value: state,
                             onTextUpdate: (String value) {
                               context
                                   .read<ChatDetailCubit>()

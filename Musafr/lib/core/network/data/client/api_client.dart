@@ -28,7 +28,17 @@ class ApiClient {
         responseBody: true,  // 👈 Logs response data
         responseHeader: true,
         error: true,
-
+        logPrint: (obj) {
+          const int chunkSize = 800;
+          for (var i = 0; i < obj.toString().length; i += chunkSize) {
+            print(obj.toString().substring(
+              i,
+              i + chunkSize > obj.toString().length
+                  ? obj.toString().length
+                  : i + chunkSize,
+            ));
+          }
+        },
       ),
     );
   }

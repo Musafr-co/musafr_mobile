@@ -78,6 +78,7 @@ class _LandingScreenViewState extends State<LandingScreenView> {
 
   @override
   void initState() {
+    super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       context.read<LoggedInUserCubit>().getUserInformation();
     });

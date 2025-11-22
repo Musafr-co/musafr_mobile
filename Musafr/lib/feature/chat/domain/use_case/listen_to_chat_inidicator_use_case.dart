@@ -21,7 +21,9 @@ class ListenToChatIndicatorUseCase {
       switch (response) {
         case DomainSuccess():
           final chat = response.data;
-          if (chat != null && chat.messages?.last?.deepSeekStatus != 0 && chat.messages?.last?.amadeusStatus != 1) {
+          if (chat != null && chat.messages?.last?.deepSeekStatus != 0
+              && (chat.messages?.last?.amadeusStatus == 1 && chat.messages?.last?.isTrigger == 1)
+          ) {
             isFinished = true;
             break;
 
