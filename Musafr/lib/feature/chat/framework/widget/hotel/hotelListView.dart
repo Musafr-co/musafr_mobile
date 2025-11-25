@@ -73,7 +73,7 @@ class _HotelCard extends StatelessWidget {
       child: Stack(
         children: [
           Image.asset(
-            'assets/cafe.jpg',
+            'assets/images/cafe.jpg',
             fit: BoxFit.cover,
             width: double.infinity,
             height: double.infinity,
@@ -93,13 +93,26 @@ class _HotelCard extends StatelessWidget {
                         color: const Color(0x4DFE3333),
                         borderRadius: BorderRadius.circular(6),
                       ),
-                      child: Text(
-                        hotel?.name ?? "",
-                        style: const TextStyle(
-                          fontSize: 10,
-                          fontWeight: FontWeight.w700,
-                          color: Colors.white,
-                        ),
+                      child: Row(
+                        children: [
+                          Image.asset(
+                            'assets/images/star.png',
+                            fit: BoxFit.cover,
+                            width: 20,
+                            height: 20,
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(4, 0, 4, 0),
+                            child: Text(
+                              hotel?.rating?.toString() ?? "",
+                              style: const TextStyle(
+                                fontSize: 10,
+                                fontWeight: FontWeight.w700,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                     const Spacer(),
