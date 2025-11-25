@@ -2,6 +2,7 @@ import 'package:musafr/feature/chat/data/mapper/parameters_mapper.dart';
 
 import '../../domain/entity/app_message.dart';
 import '../modal/messageDto.dart';
+import 'hotel_mapper.dart';
 
 class MessageMapper {
   static MessageDto fromDomain(AppMessage? message) {
@@ -31,6 +32,7 @@ class MessageMapper {
       deepSeekResponseTime: message?.deepSeekResponseTime,
       isTrigger: message?.isTrigger,
       parameters: MessageParameterMapper.toDomain(message?.parameters),
+      hotels: message?.hotels?.map((e) => HotelMapper.toDomain(e!)).toList(),
     );
   }
 }

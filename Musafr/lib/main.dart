@@ -1,14 +1,8 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
-import 'package:musafr/feature/home/framework/main/landing_screen.dart';
 
 import 'app/application/splash/splash_screen.dart';
 import 'core/di/di.dart';
 import 'core/view/color/color.dart';
-import 'feature/authentication/view/signIn/sign_in_screen.dart';
-import 'feature/phone_number/framework/sign_in_phone_number/sign_in_phone_number_screen.dart';
 
 void main() {
   runApp(const MyApp());

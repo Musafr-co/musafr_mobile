@@ -134,9 +134,11 @@ class ChatDetailCubit extends Cubit<ChatDetailState> {
                 getChatDetail();
               } else if (event.data?.messages?.last?.isTrigger == 1 && event.data?.messages?.last?.amadeusStatus == 1 ) {
                 getChatDetail();
+                emit(state.copyWith(currentMessageState: UiSuccess(data: "")));
                 _subscription?.cancel();
               }
-              else if(event.data?.messages?.last?.isTrigger == 0){
+              else if(event.data?.messages?.last?.isTrigger == 0 && event.data?.messages?.last?.deepSeekStatus == 1) {
+                emit(state.copyWith(currentMessageState: UiSuccess(data: "")));
                 _subscription?.cancel();
               }
             }

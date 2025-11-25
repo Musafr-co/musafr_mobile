@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../../core/view/color/color.dart';
 import '../../domain/entity/app_message.dart';
+import 'hotel/hotelListView.dart';
 
 class MessageDetailView extends StatelessWidget {
   final AppMessage message;
@@ -37,14 +38,14 @@ class MessageDetailView extends StatelessWidget {
             ),
           ),
         ),
-        Padding(
-          padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 10),
-          child: Align(
-            alignment: Alignment.centerLeft,
-            child: Column(
-              children: [
-                if (message.deepSeekResponse != null)
-                  Container(
+        Align(
+          alignment: Alignment.centerLeft,
+          child: Column(
+            children: [
+              if (message.deepSeekResponse != null)
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 10),
+                  child: Container(
                     padding: const EdgeInsets.all(10),
                     decoration: BoxDecoration(
                       color: messageFromServerColor,
@@ -63,16 +64,25 @@ class MessageDetailView extends StatelessWidget {
                       ),
                     ),
                   ),
-                if (message.deepSeekStatus == 0)
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Align(
-                      alignment: Alignment.centerLeft,
-                      child: CircularProgressIndicator(),
-                    ),
+                ),
+              if (message.deepSeekStatus == 0)
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 10),
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: CircularProgressIndicator(),
                   ),
-              ],
-            ),
+                ),
+              if (message.amadeusStatus == 0 && message.isTrigger == 1)
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 10),
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: CircularProgressIndicator(),
+                  ),
+                ),
+              if (message.hotels?.isNotEmpty ?? false) HotelListView(hotels: message.hotels,),
+            ],
           ),
         ),
       ],
