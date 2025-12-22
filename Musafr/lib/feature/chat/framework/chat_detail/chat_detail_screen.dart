@@ -32,19 +32,17 @@ void showChatBottomSheet(BuildContext context, int chatId) {
 class ChatDetailScreen extends StatelessWidget {
   final int chatId;
 
-  const ChatDetailScreen({super.key,required this.chatId});
+  const ChatDetailScreen({super.key, required this.chatId});
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider<ChatDetailCubit>(
-      create:
-          (context) => ChatDetailCubit(
-            context.read<GetSpecificChatDetailUseCase>(),
-            context.read<SendMessageToChatUseCase>(),
-            context.read<ListenToChatIndicatorUseCase>(),
-            chatId
-          ),
-      child: ChatDetailView(),
+      create: (context) => ChatDetailCubit(context.read<GetSpecificChatDetailUseCase>(),
+          context.read<SendMessageToChatUseCase>(), context.read<ListenToChatIndicatorUseCase>(), chatId),
+      child: Padding(
+        padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+        child: ChatDetailView(),
+      ),
     );
   }
 }

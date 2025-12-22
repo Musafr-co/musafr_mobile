@@ -44,7 +44,10 @@ class MessageDetailView extends StatelessWidget {
             children: [
               if (message.deepSeekResponse != null)
                 Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 10),
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 6,
+                    horizontal: 10,
+                  ),
                   child: Container(
                     padding: const EdgeInsets.all(10),
                     decoration: BoxDecoration(
@@ -65,23 +68,19 @@ class MessageDetailView extends StatelessWidget {
                     ),
                   ),
                 ),
-              if (message.deepSeekStatus == 0)
+              if (message.isPollingNeeded == true)
                 Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 10),
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 6,
+                    horizontal: 10,
+                  ),
                   child: Align(
                     alignment: Alignment.centerLeft,
                     child: CircularProgressIndicator(),
                   ),
                 ),
-              if (message.amadeusStatus == 0 && message.isTrigger == 1)
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 10),
-                  child: Align(
-                    alignment: Alignment.centerLeft,
-                    child: CircularProgressIndicator(),
-                  ),
-                ),
-              if (message.hotels?.isNotEmpty ?? false) HotelListView(hotels: message.hotels,),
+              if (message.hotels?.isNotEmpty ?? false)
+                HotelListView(hotels: message.hotels),
             ],
           ),
         ),

@@ -4,7 +4,7 @@ import 'package:musafr/feature/chat/domain/entity/additional_message.dart';
 import 'package:musafr/feature/chat/domain/entity/chat_detail.dart';
 import 'package:musafr/feature/chat/domain/repository/chat_repository.dart';
 
-import '../remote/source/chat_source.dart';
+import '../remote/source/chat/chat_source.dart';
 
 class ChatRepositoryImpl extends ChatRepository {
   final ChatRemoteSource _remoteSource;

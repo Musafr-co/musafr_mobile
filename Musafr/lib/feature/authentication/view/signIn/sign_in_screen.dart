@@ -16,13 +16,15 @@ class SignInScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     // final double screenHeight = MediaQuery.of(context).size.height * 0.9;
     return BlocProvider<SignInCubit>(
-      create:
-          (context) => SignInCubit(
-            context.read<ValidatePasswordUseCase>(),
-            context.read<ValidateNameUseCase>(),
-            context.read<SignInEmailUseCase>(),
-          ),
-      child: SignInWidget(),
+      create: (context) => SignInCubit(
+        context.read<ValidatePasswordUseCase>(),
+        context.read<ValidateNameUseCase>(),
+        context.read<SignInEmailUseCase>(),
+      ),
+      child: Padding(
+        padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+        child: const SignInWidget(),
+      ),
     );
   }
 }
@@ -33,7 +35,7 @@ void showSignInSheet(BuildContext context) {
     isScrollControlled: true,
     barrierColor: Colors.transparent,
     builder: (BuildContext context) {
-      return SignInScreen();
+      return const SignInScreen();
     },
   );
 }

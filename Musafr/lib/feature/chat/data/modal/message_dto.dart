@@ -1,5 +1,6 @@
-import 'package:musafr/feature/chat/data/modal/MessageParamsDto.dart';
+import 'package:musafr/feature/chat/data/modal/Message_params_dto.dart';
 import 'package:musafr/feature/chat/data/modal/hotel_dto.dart';
+import 'package:musafr/feature/chat/data/modal/message_metadata_dto.dart';
 
 class MessageDto {
   int id;
@@ -10,8 +11,10 @@ class MessageDto {
   String? senderRequestTime;
   String? deepSeekResponse;
   String? deepSeekResponseTime;
+  bool? isPollingNeeded;
   int? isTrigger;
   MessageParamsDto? parameters;
+  MessageMetaDataDto? metadata;
   List<HotelDto?>? hotels;
 
   MessageDto({
@@ -21,7 +24,9 @@ class MessageDto {
     this.amadeusStatus,
     this.senderRequest,
     this.senderRequestTime,
+    this.isPollingNeeded,
     this.deepSeekResponse,
+    this.metadata,
     this.deepSeekResponseTime,
     this.isTrigger,
     this.parameters,
@@ -37,10 +42,12 @@ class MessageDto {
         amadeusStatus: json['amadeusStatus'],
         senderRequest: json['senderRequest'],
         senderRequestTime: json['senderRequestTime'],
+        isPollingNeeded: json['isPollingNeeded'],
         deepSeekResponse: json['deepSeekResponse'],
         deepSeekResponseTime: json['deepSeekResponseTime'],
         isTrigger: json['isTrigger'],
         parameters: MessageParamsDto.fromJson(json['parameters'] ?? {}),
+        metadata: MessageMetaDataDto.fromJson(json['metadata'] ?? {}),
         hotels: List<HotelDto>.from(
           json['hotels'].map((x) => HotelDto.fromJson(x ?? {})),
         ),
@@ -57,9 +64,11 @@ class MessageDto {
       'deep_seek_status': deepSeekStatus,
       'amadeus_status': amadeusStatus,
       'sender_request': senderRequest,
+      'isPollingNeeded': isPollingNeeded,
       'sender_request_time': senderRequestTime,
       'deep_seek_response': deepSeekResponse,
       'deep_seek_response_time': deepSeekResponseTime,
+      'metadata': metadata?.toJson(),
       'is_trigger': isTrigger,
       'parameters': parameters?.toJson(),
       'hotels': hotels?.map((e) => e?.toJson()).toList(),

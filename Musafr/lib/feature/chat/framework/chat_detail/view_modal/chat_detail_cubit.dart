@@ -60,7 +60,7 @@ class ChatDetailCubit extends Cubit<ChatDetailState> {
   }
 
   void sendMessage() async {
-    if (state.currentMessageState == UiError) {
+    if (state.currentMessageState == UiError || state.chatState?.data?.messages?.last?.isPollingNeeded == true) {
       return;
     }
 
@@ -83,8 +83,7 @@ class ChatDetailCubit extends Cubit<ChatDetailState> {
           final messages = state.chatState?.data?.messages ?? [];
           if (result.data?.messages != null) {
             messages.add(result.data!.messages!.first);
-            if (result.data?.messages?.first?.deepSeekStatus == 0 ||
-                result.data?.messages?.first?.amadeusStatus == 0) {
+            if (result.data?.messages?.last?.isPollingNeeded == true) {
               emit(
                 state.copyWith(
                   currentMessageState: UiError(
@@ -129,16 +128,9 @@ class ChatDetailCubit extends Cubit<ChatDetailState> {
         switch (event) {
           case DomainSuccess():
             {
-              if (state.chatState?.data?.messages?.last?.deepSeekStatus !=
-                  event.data?.messages?.last?.deepSeekStatus) {
+              if (state.chatState?.data?.messages?.last?.isPollingNeeded ==
+                  true) {
                 getChatDetail();
-              } else if (event.data?.messages?.last?.isTrigger == 1 && event.data?.messages?.last?.amadeusStatus == 1 ) {
-                getChatDetail();
-                emit(state.copyWith(currentMessageState: UiSuccess(data: "")));
-                _subscription?.cancel();
-              }
-              else if(event.data?.messages?.last?.isTrigger == 0 && event.data?.messages?.last?.deepSeekStatus == 1) {
-                emit(state.copyWith(currentMessageState: UiSuccess(data: "")));
                 _subscription?.cancel();
               }
             }

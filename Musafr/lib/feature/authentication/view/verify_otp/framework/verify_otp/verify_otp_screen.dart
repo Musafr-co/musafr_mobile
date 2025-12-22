@@ -24,19 +24,21 @@ class VerifyOtpScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider<VerifyOtpCubit>(
-      create:
-          (context) => VerifyOtpCubit(
-            context.read<CheckOtpForLoginUseCase>(),
-            context.read<CheckOtpForSignUpUseCase>(),
-            context.read<SignUpPhoneNumberUseCase>(),
-            context.read<SignInPhoneNumberUseCase>(),
-            context.read<StartTimerUseCase>(),
-            context.read<StopTimerUseCase>(),
-            context.read<GetTimerTimeUseCase>(),
-            isFromSignUp: isFromSignUp,
-            phoneNumber: phoneNumber,
-          ),
-      child: VerifyOtpView(),
+      create: (context) => VerifyOtpCubit(
+        context.read<CheckOtpForLoginUseCase>(),
+        context.read<CheckOtpForSignUpUseCase>(),
+        context.read<SignUpPhoneNumberUseCase>(),
+        context.read<SignInPhoneNumberUseCase>(),
+        context.read<StartTimerUseCase>(),
+        context.read<StopTimerUseCase>(),
+        context.read<GetTimerTimeUseCase>(),
+        isFromSignUp: isFromSignUp,
+        phoneNumber: phoneNumber,
+      ),
+      child: Padding(
+        padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+        child: const VerifyOtpView(),
+      ),
     );
   }
 }

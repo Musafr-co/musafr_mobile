@@ -1,4 +1,4 @@
-import 'package:musafr/feature/chat/data/modal/MessageParamsDto.dart';
+import 'package:musafr/feature/chat/data/modal/Message_params_dto.dart';
 import 'package:musafr/feature/chat/domain/entity/message_parameters.dart';
 
 class MessageParameterMapper {

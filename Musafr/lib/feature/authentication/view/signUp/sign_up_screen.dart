@@ -19,7 +19,7 @@ void showSignUpBottomSheet(BuildContext context) {
     builder: (BuildContext context) {
       final double screenHeight = MediaQuery.of(context).size.height;
 
-      return SizedBox(height: screenHeight, child: SignUpScreen());
+      return SizedBox(height: screenHeight, child: const SignUpScreen());
     },
   );
 }
@@ -37,7 +37,10 @@ class SignUpScreen extends StatelessWidget {
             context.read<SignUpEmailUseCase>(),
             context.read<ValidateNameUseCase>(),
           ),
-      child: SignUpView(),
+      child: Padding(
+        padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+        child: const SignUpView(),
+      ),
     );
   }
 }

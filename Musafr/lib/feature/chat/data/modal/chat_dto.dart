@@ -1,4 +1,4 @@
-import 'package:musafr/feature/chat/data/modal/messageDto.dart';
+import 'package:musafr/feature/chat/data/modal/message_dto.dart';
 
 class ChatDto {
   int id;
