@@ -8,6 +8,8 @@ import '../../../../../core/domain/model/domain_response.dart';
 import '../../../../../core/view/ui_state/ui_state.dart';
 import '../../../domain/use_case/get_specific_chat_detail_use_case.dart';
 import '../../../domain/use_case/listen_to_chat_inidicator_use_case.dart';
+import '../../../../chat/domain/entity/hotel_info.dart';
+import '../../../../chat/domain/entity/message_metadata.dart';
 import 'chat_detail_state.dart';
 
 class ChatDetailCubit extends Cubit<ChatDetailState> {
@@ -147,5 +149,23 @@ class ChatDetailCubit extends Cubit<ChatDetailState> {
         }
       },
     );
+  }
+  void onHotelSelected(HotelInfo hotel, MessageMetadata? metadata) {
+    if (hotel.hotelId != null) {
+      emit(
+        state.copyWith(
+          showHotelOffersEvent: HotelOffersEvent(
+            hotelId: hotel.hotelId!,
+            checkInDate: metadata?.checkInDate ?? "",
+            guests: metadata?.guestsCount ?? 1,
+            roomQuantity: metadata?.roomsQuantity ?? 1,
+          ),
+        ),
+      );
+    }
+  }
+
+  void resetShowHotelOffersEvent() {
+    emit(state.copyWith(showHotelOffersEvent: null));
   }
 }

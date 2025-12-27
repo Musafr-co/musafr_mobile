@@ -2,10 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:musafr/feature/chat/domain/entity/hotel_info.dart';
 import 'package:musafr/feature/chat/framework/widget/hotel/hotelCardView.dart';
 
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:musafr/feature/chat/domain/entity/message_metadata.dart';
+import 'package:musafr/feature/chat/framework/chat_detail/view_modal/chat_detail_cubit.dart';
+
 class HotelListView extends StatefulWidget {
   final List<HotelInfo?>? hotels;
+  final MessageMetadata? metadata;
 
-  const HotelListView({super.key, required this.hotels});
+  const HotelListView({super.key, required this.hotels, this.metadata});
 
   @override
   State<HotelListView> createState() => _HotelListViewState();
@@ -52,7 +57,7 @@ class _HotelListViewState extends State<HotelListView> {
             },
             child: Padding(
               padding: const EdgeInsets.all(8.0),
-              child: _HotelCard(hotel: hotel),
+              child: _HotelCard(hotel: hotel, metadata: widget.metadata),
             ),
           );
         },
@@ -62,13 +67,20 @@ class _HotelListViewState extends State<HotelListView> {
 }
 
 class _HotelCard extends StatelessWidget {
-  const _HotelCard({required this.hotel});
+  const _HotelCard({required this.hotel, this.metadata});
 
   final HotelInfo? hotel;
+  final MessageMetadata? metadata;
 
   @override
   Widget build(BuildContext context) {
-    return ClipRRect(
+    return GestureDetector(
+      onTap: () {
+        if (hotel != null) {
+          context.read<ChatDetailCubit>().onHotelSelected(hotel!, metadata);
+        }
+      },
+      child: ClipRRect(
       borderRadius: BorderRadius.circular(16),
       child: Stack(
         children: [
@@ -126,6 +138,6 @@ class _HotelCard extends StatelessWidget {
           ),
         ],
       ),
-    );
+    ));
   }
 }

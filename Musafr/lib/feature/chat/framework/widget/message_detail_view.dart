@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../../core/view/color/color.dart';
 import '../../domain/entity/app_message.dart';
-import 'hotel/hotelListView.dart';
+import 'hotel/hotel_list_view.dart';
 
 class MessageDetailView extends StatelessWidget {
   final AppMessage message;
@@ -80,7 +80,7 @@ class MessageDetailView extends StatelessWidget {
                   ),
                 ),
               if (message.hotels?.isNotEmpty ?? false)
-                HotelListView(hotels: message.hotels),
+                HotelListView(hotels: message.hotels, metadata: message.metadata),
             ],
           ),
         ),

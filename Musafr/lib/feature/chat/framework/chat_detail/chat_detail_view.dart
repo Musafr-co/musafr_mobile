@@ -9,6 +9,7 @@ import '../../../../core/view/widgets/dialogs/error_dialog.dart';
 import '../../../../core/view/widgets/dialogs/loading/loading_dialog.dart';
 import '../../../../core/view/widgets/top_handle_view/top_handle_view.dart';
 import '../../domain/entity/chat_detail.dart';
+import 'package:musafr/feature/hotel/framework/sheet/hotel_offers_bottom_sheet.dart';
 import '../widget/SendMessageToChatView.dart';
 import '../widget/message_detail_view.dart';
 
@@ -55,6 +56,24 @@ class ChatDetailView extends StatelessWidget {
                 }
               });
               context.read<ChatDetailCubit>().resetNavigation();
+            }
+          },
+        ),
+        BlocListener<ChatDetailCubit, ChatDetailState>(
+          listenWhen:
+              (previous, current) =>
+                  previous.showHotelOffersEvent != current.showHotelOffersEvent,
+          listener: (context, state) {
+            if (state.showHotelOffersEvent != null) {
+              final event = state.showHotelOffersEvent!;
+              showHotelOffersBottomSheet(
+                context,
+                hotelId: event.hotelId,
+                checkInDate: event.checkInDate,
+                guests: event.guests,
+                roomQuantity: event.roomQuantity,
+              );
+              context.read<ChatDetailCubit>().resetShowHotelOffersEvent();
             }
           },
         ),
@@ -110,18 +129,24 @@ class ChatDetailView extends StatelessWidget {
                           ),
                         ],
                       ),
-                      state?.data?.messages != null
-                          ? Expanded(
-                            child: ListView.builder(
-                              controller: _scrollController,
-                              itemCount: state?.data?.messages?.length ?? 0,
-                              itemBuilder: (context, index) {
-                                final message = state?.data?.messages?[index];
-                                if (message == null) return Container();
-                                return MessageDetailView(message: message);
-                              },
-                            ),
-                          )
+                      state is UiLoading && state?.data == null
+                          ? const Expanded(
+                              child: Center(
+                                child: CircularProgressIndicator(),
+                              ),
+                            )
+                          : state?.data?.messages != null
+                              ? Expanded(
+                                child: ListView.builder(
+                                  controller: _scrollController,
+                                  itemCount: state?.data?.messages?.length ?? 0,
+                                  itemBuilder: (context, index) {
+                                    final message = state?.data?.messages?[index];
+                                    if (message == null) return Container();
+                                    return MessageDetailView(message: message);
+                                  },
+                                ),
+                              )
                           : Expanded(
                             child: Image(
                               image: AssetImage(
